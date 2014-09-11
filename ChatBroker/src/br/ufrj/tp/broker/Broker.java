@@ -1,15 +1,14 @@
 package br.ufrj.tp.broker;
 
-import java.util.List;
 
-import br.ufrj.tp.client.Client;
+import br.ufrj.tp.sockBroker.SockBroker;
 
 public class Broker implements Runnable{
-	private List<Client> clientList;
+	private SockBroker sock;
 	
 	
-	public Broker(List<Client> clientList) {
-		this.clientList = clientList;
+	public Broker(SockBroker sockBroker) {
+		this.sock = sockBroker;
 	}
 
 
