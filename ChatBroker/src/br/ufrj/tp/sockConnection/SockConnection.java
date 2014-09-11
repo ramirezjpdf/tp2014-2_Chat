@@ -4,5 +4,5 @@ import java.io.IOException;
 
 public interface SockConnection {
 	public void send(String msg) throws IOException;
-	public String recv();
+	public String recv() throws IOException;
 }

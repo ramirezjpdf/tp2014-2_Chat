@@ -8,6 +8,7 @@ import java.net.SocketException;
 
 public class UDPSockConnection implements SockConnection{
 	private static int PORT = 1024;
+	private static final int MSG_LEN = 1024;
 	private static int getPort(){
 		return PORT++;
 	}
@@ -40,14 +41,16 @@ public class UDPSockConnection implements SockConnection{
 	@Override
 	public void send(String msg) throws IOException {
 		byte[] sendData = msg.getBytes();
-		DatagramPacket sendPkg = new DatagramPacket(sendData, sendData.length, udpClient.getAdress(), udpClient.getPort());
-		udpSocket.send(sendPkg);
+		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, udpClient.getAdress(), udpClient.getPort());
+		udpSocket.send(sendPacket);
 	}
 
 	@Override
-	public String recv() {
-		// TODO Auto-generated method stub
-		return null;
+	public String recv() throws IOException {
+		byte[] recvData = new byte[MSG_LEN];
+		DatagramPacket recvPacket = new DatagramPacket(recvData, recvData.length);
+		udpSocket.receive(recvPacket);
+		return new String(recvPacket.getData());
 	}
 
 }
