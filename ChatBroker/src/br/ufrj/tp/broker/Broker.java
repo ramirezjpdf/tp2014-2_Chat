@@ -4,11 +4,11 @@ package br.ufrj.tp.broker;
 import br.ufrj.tp.sockConnection.SockConnection;
 
 public class Broker implements Runnable{
-	private SockConnection sock;
+	private SockConnection sockConn;
 	
 	
-	public Broker(SockConnection sockBroker) {
-		this.sock = sockBroker;
+	public Broker(SockConnection sockConn) {
+		this.sockConn = sockConn;
 	}
 
 
