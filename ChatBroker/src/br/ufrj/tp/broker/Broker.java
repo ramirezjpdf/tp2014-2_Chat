@@ -1,13 +1,13 @@
 package br.ufrj.tp.broker;
 
 
-import br.ufrj.tp.sockBroker.SockBroker;
+import br.ufrj.tp.sockConnection.SockConnection;
 
 public class Broker implements Runnable{
-	private SockBroker sock;
+	private SockConnection sock;
 	
 	
-	public Broker(SockBroker sockBroker) {
+	public Broker(SockConnection sockBroker) {
 		this.sock = sockBroker;
 	}
 

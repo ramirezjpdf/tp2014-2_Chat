@@ -5,7 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
 import br.ufrj.tp.broker.BrokerFactory;
-import br.ufrj.tp.sockBroker.UDPSockBroker;
+import br.ufrj.tp.sockConnection.UDPSockConnection;
 
 public class UDPSockListener implements SockListener{
 	private static final int port = 1023;
@@ -20,7 +20,7 @@ public class UDPSockListener implements SockListener{
 			while(true){
 				DatagramPacket recvPkg = new DatagramPacket(recvData, recvData.length);
 				serverSocket.receive(recvPkg);
-				factory.getBroker(new UDPSockBroker(recvPkg)).run();
+				factory.getBroker(new UDPSockConnection(recvPkg)).run();
 			}
 		}finally{
 			serverSocket.close();

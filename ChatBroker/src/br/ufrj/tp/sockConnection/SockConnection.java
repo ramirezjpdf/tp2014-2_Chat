@@ -1,8 +1,8 @@
-package br.ufrj.tp.sockBroker;
+package br.ufrj.tp.sockConnection;
 
 import java.io.IOException;
 
-public interface SockBroker {
+public interface SockConnection {
 	public void send(String msg) throws IOException;
 	public String recv();
 }

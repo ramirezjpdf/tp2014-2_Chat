@@ -1,4 +1,4 @@
-package br.ufrj.tp.sockBroker;
+package br.ufrj.tp.sockConnection;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -6,17 +6,17 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 
-public class UDPSockBroker implements SockBroker{
+public class UDPSockConnection implements SockConnection{
 	private static int PORT = 1024;
 	private static int getPort(){
 		return PORT++;
 	}
 	
-	private class UDPClient{
+	private class UDPConnection{
 		private InetAddress adress;
 		private int port;
 		
-		public UDPClient(InetAddress adress, int port) {
+		public UDPConnection(InetAddress adress, int port) {
 			this.adress = adress;
 			this.port = port;
 		}
@@ -30,11 +30,11 @@ public class UDPSockBroker implements SockBroker{
 		}
 	}
 	
-	private UDPClient udpClient;
+	private UDPConnection udpClient;
 	private DatagramSocket udpSocket;
 	
-	public UDPSockBroker(DatagramPacket pkg) throws SocketException{
-		this.udpClient = new UDPClient(pkg.getAddress(), pkg.getPort());
+	public UDPSockConnection(DatagramPacket pkg) throws SocketException{
+		this.udpClient = new UDPConnection(pkg.getAddress(), pkg.getPort());
 		this.udpSocket = new DatagramSocket(getPort());
 	}
 	@Override

@@ -1,9 +1,9 @@
 package br.ufrj.tp.broker;
 
-import br.ufrj.tp.sockBroker.SockBroker;
+import br.ufrj.tp.sockConnection.SockConnection;
 
 public class BrokerFactory {
-	public Broker getBroker(SockBroker sockBroker){
+	public Broker getBroker(SockConnection sockBroker){
 		return null;
 	}
 }
