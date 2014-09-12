@@ -4,14 +4,11 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
+
+import br.ufrj.tp.utils.SocketUtils;
 
 public class UDPSockConnection implements SockConnection{
-	private static int PORT = 1024;
 	private static final int MSG_LEN = 1024;
-	private static int getPort(){
-		return PORT++;
-	}
 	
 	private class UDPConnection{
 		private InetAddress adress;
@@ -29,14 +26,28 @@ public class UDPSockConnection implements SockConnection{
 		public int getPort() {
 			return port;
 		}
+
+		public void setAdress(InetAddress adress) {
+			this.adress = adress;
+		}
+
+		public void setPort(int port) {
+			this.port = port;
+		}
+		
+		
 	}
 	
 	private UDPConnection udpClient;
 	private DatagramSocket udpSocket;
 	
-	public UDPSockConnection(DatagramPacket pkg) throws SocketException{
+	public UDPSockConnection(InetAddress address, int port) throws IOException{
+		this.udpClient = new UDPConnection(address, port);
+		this.udpSocket = new DatagramSocket(SocketUtils.getAvailablePort());
+	}
+	public UDPSockConnection(DatagramPacket pkg) throws IOException{
 		this.udpClient = new UDPConnection(pkg.getAddress(), pkg.getPort());
-		this.udpSocket = new DatagramSocket(getPort());
+		this.udpSocket = new DatagramSocket(SocketUtils.getAvailablePort());
 	}
 	@Override
 	public void send(String msg) throws IOException {
@@ -50,7 +61,17 @@ public class UDPSockConnection implements SockConnection{
 		byte[] recvData = new byte[MSG_LEN];
 		DatagramPacket recvPacket = new DatagramPacket(recvData, recvData.length);
 		udpSocket.receive(recvPacket);
+		refreshUDPClient(recvPacket);
 		return new String(recvPacket.getData());
+	}
+	
+	private void refreshUDPClient(DatagramPacket newPacket){
+		if(!newPacket.getAddress().equals(udpClient.getAdress())){
+			udpClient.setAdress(newPacket.getAddress());
+		}
+		if(newPacket.getPort() != udpClient.getPort()){
+			udpClient.setPort(newPacket.getPort());
+		}
 	}
 
 }
