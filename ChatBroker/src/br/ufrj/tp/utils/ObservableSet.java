@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class ObservableSet<T> extends Observable {
 	
-	public class ObservalbleSetChange<E>{
+	public static class ObservableSetChange<E>{
 		public static final String ADDED_ELEMENT    = "add";
 		public static final String REMOVED_ELEMENT  = "rem";
 		public static final String ADDED_ELEMENT_COLLECTION   = "addAll";
@@ -20,7 +20,7 @@ public class ObservableSet<T> extends Observable {
 		private E elemChanged;
 		private Collection<? extends E> elemChangedCollection;
 		
-		public ObservalbleSetChange(String status, E elemChanged,
+		public ObservableSetChange(String status, E elemChanged,
 				Collection<? extends E> elemChangedCollection) {
 			super();
 			this.status = status;
@@ -71,8 +71,8 @@ public class ObservableSet<T> extends Observable {
 		@Override
 		public void remove() {
 			it.remove();
-			hasChanged();
-			notifyObservers(new ObservalbleSetChange<E>(ObservalbleSetChange.REMOVED_ELEMENT, currentElem, null));
+			setChanged();
+			notifyObservers(new ObservableSetChange<E>(ObservableSetChange.REMOVED_ELEMENT, currentElem, null));
 		}
 		
 		
@@ -84,8 +84,8 @@ public class ObservableSet<T> extends Observable {
     public boolean add(T arg0) {
 		boolean b = set.add(arg0);
 		if(b){
-			hasChanged();
-			notifyObservers(new ObservalbleSetChange<T>(ObservalbleSetChange.ADDED_ELEMENT, arg0, null));
+			setChanged();
+			notifyObservers(new ObservableSetChange<T>(ObservableSetChange.ADDED_ELEMENT, arg0, null));
 		}
 		return b;
 	}
@@ -93,15 +93,15 @@ public class ObservableSet<T> extends Observable {
 	public boolean addAll(Collection<? extends T> arg0) {
 		boolean b = set.addAll(arg0);
 		if(b){
-			hasChanged();
-			notifyObservers(new ObservalbleSetChange<T>(ObservalbleSetChange.ADDED_ELEMENT_COLLECTION, null, arg0));
+			setChanged();
+			notifyObservers(new ObservableSetChange<T>(ObservableSetChange.ADDED_ELEMENT_COLLECTION, null, arg0));
 		}
 		return b;
 	}
 
-	public void clear() {
-		set.clear();
-	}
+//	public void clear() {
+//		set.clear();
+//	}
 
 	public boolean contains(Object arg0) {
 		return set.contains(arg0);
@@ -130,8 +130,8 @@ public class ObservableSet<T> extends Observable {
 	public boolean remove(T arg0) {
 		boolean b = set.remove(arg0);
 		if(b){
-			hasChanged();
-			notifyObservers(new ObservalbleSetChange<T>(ObservalbleSetChange.REMOVED_ELEMENT, arg0, null));
+			setChanged();
+			notifyObservers(new ObservableSetChange<T>(ObservableSetChange.REMOVED_ELEMENT, arg0, null));
 		}
 		return b;
 	}
@@ -139,8 +139,8 @@ public class ObservableSet<T> extends Observable {
 	public boolean removeAll(Collection<? extends T> arg0) {
 		boolean b = set.removeAll(arg0);
 		if(b){
-			hasChanged();
-			notifyObservers(new ObservalbleSetChange<T>(ObservalbleSetChange.REMOVED_ELEMENT_COLLECTION, null, arg0));
+			setChanged();
+			notifyObservers(new ObservableSetChange<T>(ObservableSetChange.REMOVED_ELEMENT_COLLECTION, null, arg0));
 		}
 		return b;
 	}
@@ -152,8 +152,8 @@ public class ObservableSet<T> extends Observable {
 		}
 		boolean b = set.retainAll(arg0);
 		if(b){
-			hasChanged();
-			notifyObservers(new ObservalbleSetChange<T>(ObservalbleSetChange.REMOVED_ELEMENT_COLLECTION, null, removed));
+			setChanged();
+			notifyObservers(new ObservableSetChange<T>(ObservableSetChange.REMOVED_ELEMENT_COLLECTION, null, removed));
 		}
 		return b;
 	}
@@ -170,17 +170,21 @@ public class ObservableSet<T> extends Observable {
 		return set.toArray(arg0);
 	}
 
-	public ObservableSet(Class<? extends Set<T>> setClass) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
-        Constructor<? extends Set<T>> constr = null;
-        Constructor<? extends Set<T>>[] constructors = (Constructor<? extends Set<T>>[])setClass.getDeclaredConstructors();
-        for(Constructor<? extends Set<T>> c : constructors){
-            if(c.getGenericParameterTypes().length == 0){
-                constr = c;
-                break;
-            }
-        }
-        constr.setAccessible(true);
-        this.set = constr.newInstance();
-    }
+//	public ObservableSet(Class<? extends Set<T>> setClass) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+//        Constructor<? extends Set<T>> constr = null;
+//        Constructor<? extends Set<T>>[] constructors = (Constructor<? extends Set<T>>[])setClass.getDeclaredConstructors();
+//        for(Constructor<? extends Set<T>> c : constructors){
+//            if(c.getGenericParameterTypes().length == 0){
+//                constr = c;
+//                break;
+//            }
+//        }
+//        constr.setAccessible(true);
+//        this.set = constr.newInstance();
+//    }
+	
+	public ObservableSet(Set<T> set){
+		this.set = set;
+	}
 
 }
