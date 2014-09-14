@@ -6,7 +6,7 @@ import br.ufrj.tp.broker.BrokerFactory;
 import br.ufrj.tp.sockListener.SockListener;
 import br.ufrj.tp.sockListener.UDPSockListener;
 
-public class MainTest {
+public class MainTestBroker {
 	public static void main(String[] args) {
 		SockListener listener = new UDPSockListener();
 		System.out.println("Listening for incoming clients...");
