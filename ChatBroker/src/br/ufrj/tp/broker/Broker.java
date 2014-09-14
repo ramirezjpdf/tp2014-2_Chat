@@ -2,10 +2,10 @@ package br.ufrj.tp.broker;
 
 
 import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
 
 import br.ufrj.tp.sockConnection.SockConnection;
-
-import java.util.Observer;
 
 public class Broker implements Runnable, Observer{
     private SockConnection sockConn;
