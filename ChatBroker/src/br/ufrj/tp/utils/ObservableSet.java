@@ -2,6 +2,7 @@ package br.ufrj.tp.utils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Observable;
@@ -44,6 +45,34 @@ public class ObservableSet<T> extends Observable {
 		}
 		public void setElemChangedCollection(Collection<? extends E> elemChangedCollection) {
 			this.elemChangedCollection = elemChangedCollection;
+		}		
+	}
+	
+	private class ObservableSetIterator<E> implements Iterator<E>{
+		private Iterator<E> it;
+		private E currentElem;
+
+		public ObservableSetIterator(Iterator<E> it) {
+			this.it = it;
+			this.currentElem = null;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return it.hasNext();
+		}
+
+		@Override
+		public E next() {
+			currentElem =  it.next();
+			return currentElem;
+		}
+
+		@Override
+		public void remove() {
+			it.remove();
+			hasChanged();
+			notifyObservers(new ObservalbleSetChange<E>(ObservalbleSetChange.REMOVED_ELEMENT, currentElem, null));
 		}
 		
 		
@@ -95,7 +124,7 @@ public class ObservableSet<T> extends Observable {
 	}
 
 	public Iterator<T> iterator() {
-		return set.iterator();
+		return new ObservableSetIterator<T>(set.iterator());
 	}
 
 	public boolean remove(T arg0) {
@@ -116,15 +145,18 @@ public class ObservableSet<T> extends Observable {
 		return b;
 	}
 
-//	public boolean retainAll(Collection<? extends T> arg0) {
-//		Collection<? extends T> removed = new ArrayList<>
-//		boolean b = set.retainAll(arg0);
-//		if(b){
-//			hasChanged();
-//			notifyObservers(new ObservalbleSetChange<T>(ObservalbleSetChange.REMOVED_ELEMENT_COLLECTION, null, arg0));
-//		}
-//		return b;
-//	}
+	public boolean retainAll(Collection<? extends T> arg0) {
+		Collection<T> removed = new ArrayList<T>();
+		for (T t : set){
+			if(!arg0.contains(t)) removed.add(t);
+		}
+		boolean b = set.retainAll(arg0);
+		if(b){
+			hasChanged();
+			notifyObservers(new ObservalbleSetChange<T>(ObservalbleSetChange.REMOVED_ELEMENT_COLLECTION, null, removed));
+		}
+		return b;
+	}
 
 	public int size() {
 		return set.size();
