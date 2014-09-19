@@ -11,7 +11,7 @@ public class TCPSockListener implements SockListener{
 
 	@Override
 	public void listen(BrokerFactory factory) throws IOException {
-		ServerSocket serverSocket = new ServerSocket(SockListenerConst.MSG_LEN);
+		ServerSocket serverSocket = new ServerSocket(SockListenerConst.PORT);
 		try{
 			while(true){
 				Socket clientSocket = serverSocket.accept();
