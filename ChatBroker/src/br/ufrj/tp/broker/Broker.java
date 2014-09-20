@@ -15,6 +15,9 @@ public class Broker implements Runnable, Observer{
         this.sockConn = sockConn;
     }
 
+    public void sendMsgToClient(byte[] msg){
+    	
+    }
 
     @Override
     public void run() {
