@@ -14,17 +14,16 @@ public class TCPSockConnection implements SockConnection {
 	}
 
 	@Override
-	public void send(String msg) throws IOException {
-		byte[] sendData = msg.getBytes();
-		clientSocket.getOutputStream().write(sendData);
+	public void send(byte[] msg) throws IOException {
+		clientSocket.getOutputStream().write(msg);
 
 	}
 
 	@Override
-	public String recv() throws IOException {
+	public byte[] recv() throws IOException {
 		byte[] recvData = new byte[SockListenerConst.MSG_LEN];
 		clientSocket.getInputStream().read(recvData);
-		return new String(recvData);
+		return recvData;
 	}
 
 }

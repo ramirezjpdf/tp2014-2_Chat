@@ -20,11 +20,11 @@ public class Broker implements Runnable, Observer{
     public void run() {
         System.out.println("Broker instantiated");
         try {
-            sockConn.send("OK");
-            String msg = sockConn.recv();
+            sockConn.send("OK".getBytes());
+            String msg = new String(sockConn.recv());
             while (!msg.trim().equals("END")){
-                sockConn.send(msg.toUpperCase());
-                msg = sockConn.recv();
+                sockConn.send(msg.toUpperCase().getBytes());
+                msg = new String(sockConn.recv());
                 System.out.println("Received from Client: " + msg + " => " + msg.equals("END"));
                 System.out.println("msg.equals(\"END\"): " + msg.trim().equals("END"));
             }

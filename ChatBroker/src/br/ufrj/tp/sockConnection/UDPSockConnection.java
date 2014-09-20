@@ -50,19 +50,18 @@ public class UDPSockConnection implements SockConnection{
 		this.udpSocket = new DatagramSocket(SocketUtils.getAvailablePort());
 	}
 	@Override
-	public void send(String msg) throws IOException {
-		byte[] sendData = msg.getBytes();
-		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, udpClient.getAdress(), udpClient.getPort());
+	public void send(byte[] msg) throws IOException {
+		DatagramPacket sendPacket = new DatagramPacket(msg, msg.length, udpClient.getAdress(), udpClient.getPort());
 		udpSocket.send(sendPacket);
 	}
 
 	@Override
-	public String recv() throws IOException {
+	public byte[] recv() throws IOException {
 		byte[] recvData = new byte[MSG_LEN];
 		DatagramPacket recvPacket = new DatagramPacket(recvData, recvData.length);
 		udpSocket.receive(recvPacket);
 		refreshUDPClient(recvPacket);
-		return new String(recvPacket.getData());
+		return recvPacket.getData();
 	}
 	
 	private void refreshUDPClient(DatagramPacket newPacket){
