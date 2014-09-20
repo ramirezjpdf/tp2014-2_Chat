@@ -78,6 +78,8 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
     @Override
     public void update(Observable obs, Object arg){
         //TODO update client with the new client added in the server's client list
+    	
+    	
     }
     
     @Override
