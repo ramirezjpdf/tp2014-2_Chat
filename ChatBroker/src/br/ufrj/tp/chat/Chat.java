@@ -6,9 +6,11 @@ import br.ufrj.tp.broker.Broker;
 
 public class Chat {
 	private List<Broker> brokerList;
-	
+	private String id;
+
 	public Chat(List<Broker> brokerList){
 		this.brokerList = brokerList;
+		this.id = ChatIdUtil.generateChatId(brokerList);
 	}
 	
 	public void sendMsg(byte[] msg, Broker senderBroker){
@@ -17,4 +19,9 @@ public class Chat {
 			broker.sendMsgToClient(msg);
 		}
 	}
+	
+	public String getId() {
+		return id;
+	}
+
 }
