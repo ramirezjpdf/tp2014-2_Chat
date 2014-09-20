@@ -20,10 +20,11 @@ public class ServerController {
 			try {
 				server.start();
 			} catch (IOException e) {
-				msg = "ERROR: I/O operation failed during connection establishment via Socket.";
+				msg = "ERROR: An I/O error occurred when waiting for a connection.";
+				return false;
 			}
 			
-			//FIXME: Como a função server.start() inicia o servidor, que fica em loop contínuo, a linha de execução não chega até esse ponto.
+			//FIXME: Como a funcao server.start() inicia o servidor, que fica em loop continuo, a linha de execucao não chega ate esse ponto.
 			msg = "Server Chat is running! Waiting for Clients connections...";
 			return true;
 		}
