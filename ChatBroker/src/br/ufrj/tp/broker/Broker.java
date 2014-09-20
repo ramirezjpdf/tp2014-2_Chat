@@ -29,7 +29,13 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
     }
 
     public void sendMsgToClient(byte[] msg){
-    	//TODO
+    	try{
+    		sockConn.send(msg);
+    	} catch (IOException e) {
+            System.out.println("ERROR - Could not send message from Broker to client");
+            e.printStackTrace();
+        }
+    	
     }
     
     public void initiateChatWithMe(Chat chat){
@@ -64,7 +70,7 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
             }
             System.out.println("Closing broker");
         } catch (IOException e) {
-            System.out.println("ERROR - Could not send message from Borker to client");
+            System.out.println("ERROR - Could not send message from Broker to client");
             e.printStackTrace();
         }
     }
