@@ -12,10 +12,12 @@ public class TCPSockListener implements SockListener{
 	@Override
 	public void listen(BrokerFactory factory) throws IOException {
 		ServerSocket serverSocket = new ServerSocket(SockListenerConst.PORT);
+		System.out.println("Connection Socket do Lado Servidor estabelecido.");
+		
 		try{
 			while(true){
 				Socket clientSocket = serverSocket.accept();
-				factory.getBroker(new TCPSockConnection(clientSocket));
+				factory.getBroker(new TCPSockConnection(clientSocket)).run();
 			}
 		}finally{
 			serverSocket.close();
