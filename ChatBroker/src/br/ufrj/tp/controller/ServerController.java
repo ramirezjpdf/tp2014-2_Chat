@@ -18,18 +18,20 @@ public class ServerController {
 			server = new Server(sockListener);
 			
 			try {
+				//A mensagem pode começar como "Server Chat is running!..."
+				//Porquê em caso de qualquer erro, ela será mudada;
+				//Caso nada de errado aconteça, então o servidor está funcionando.
+				msg = "Server Chat is running! Waiting for Clients connections...";
 				server.start();
 			} catch (IOException e) {
 				msg = "ERROR: An I/O error occurred when waiting for a connection.";
 				return false;
 			}
-			
-			//FIXME: Como a funcao server.start() inicia o servidor, que fica em loop continuo, a linha de execucao não chega ate esse ponto.
-			msg = "Server Chat is running! Waiting for Clients connections...";
 			return true;
 		}
 		
-		msg = "ERROR: You've typed an incorrect option. Please, try again!";
+		msg = "ERROR: You've typed an incorrect option. Please, try again! " +
+			  "Reminding: 1 for TCP, 2 for UDP.";
 		return false;
 	}
 	
