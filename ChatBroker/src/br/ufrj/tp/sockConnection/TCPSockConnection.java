@@ -15,7 +15,9 @@ public class TCPSockConnection implements SockConnection {
 
 	@Override
 	public void send(byte[] msg) throws IOException {
-		clientSocket.getOutputStream().write(msg);
+		synchronized(clientSocket){
+			clientSocket.getOutputStream().write(msg);
+		}
 
 	}
 
