@@ -36,7 +36,7 @@ public class Server implements Runnable{
 		for(int j = 0; j < threads.size(); j++){
 			threads.get(j).start();
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -48,7 +48,7 @@ public class Server implements Runnable{
 	public void run() {
 		
 		try {
-			welcomeSockets.get(i).listen(brokerFactory);
+			welcomeSockets.get(i).listen(brokerFactory, i);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

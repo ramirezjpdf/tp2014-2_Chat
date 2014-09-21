@@ -2,6 +2,7 @@ package br.ufrj.tp.broker;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,17 +15,19 @@ import br.ufrj.tp.sockConnection.SockConnection;
 
 public class Broker implements Runnable, Observer, Comparable<Broker>{
     private SockConnection sockConn;
-    private Client client;
+    private ArrayList<Client> clients;
     private Map<String, Chat> myChats;
     
     
     public Broker(SockConnection sockConn) {
         this(sockConn, null);
+        clients = new ArrayList<Client>(); 
     }
     
     public Broker(SockConnection sockConn, Client client){
     	this.sockConn = sockConn;
-    	this.client = client;
+    	clients = new ArrayList<Client>();
+    	clients.add(client);
     	this.myChats = new HashMap<String, Chat>();
     }
 
@@ -60,8 +63,16 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
     public void run() {
         System.out.println("Broker instantiated");
         try {
-            sockConn.send("OK".getBytes());
+            sockConn.send("Bem vindo ao Chat de Teleprocessamento!".getBytes());
+            sockConn.send("\nPrecisamos do seu nome, pode enviá-lo?".getBytes());
             String msg = new String(sockConn.recv());
+            clients.add(new Client(msg));
+            sockConn.send("Lista de usuarios online.\n".toUpperCase().getBytes());
+            for(Client c: clients){
+            	String mensagem = c.getUsername() + "\n"; 
+            	sockConn.send(mensagem.toUpperCase().getBytes());
+            }
+            msg = new String(sockConn.recv());
             while (!msg.trim().equals("END")){
                 sockConn.send(msg.toUpperCase().getBytes());
                 msg = new String(sockConn.recv());
@@ -82,18 +93,12 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
     	
     }
     
+    
+    //return client.getUsername().compareTo(anotherBroker.getClient().getUsername());
     @Override
 	public int compareTo(Broker anotherBroker) {
-		return client.getUsername().compareTo(anotherBroker.getClient().getUsername());
+		return 1;
     }
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((client == null) ? 0 : client.hashCode());
-		return result;
-	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -103,16 +108,7 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Broker other = (Broker) obj;
-		if (client == null) {
-			if (other.client != null)
-				return false;
-		} else if (!client.equals(other.client))
-			return false;
-		return true;
+		return false;
 	} 
 	
-	public Client getClient() {
-		return client;
-	}
 }
