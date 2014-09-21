@@ -7,6 +7,7 @@ import java.net.DatagramSocket;
 import br.ufrj.tp.broker.BrokerFactory;
 import br.ufrj.tp.sockConnection.UDPSockConnection;
 
+//TODO: Implementar listen(BrokenFactory factory, int port).
 public class UDPSockListener implements SockListener{
 	@Override
 	public void listen(BrokerFactory factory) throws IOException {
@@ -22,6 +23,10 @@ public class UDPSockListener implements SockListener{
 		}finally{
 			serverSocket.close();
 		}
+	}
+
+	public void listen(BrokerFactory factory, int port) throws IOException {
+		
 	}
 
 }

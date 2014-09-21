@@ -6,4 +6,5 @@ import br.ufrj.tp.broker.BrokerFactory;
 
 public interface SockListener {
 	public void listen(BrokerFactory factory) throws IOException;
+	public void listen(BrokerFactory factory, int port) throws IOException;
 }

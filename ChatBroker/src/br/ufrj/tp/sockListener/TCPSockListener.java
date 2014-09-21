@@ -23,4 +23,25 @@ public class TCPSockListener implements SockListener{
 			serverSocket.close();
 		}
 	}
+	
+	@Override
+	public void listen(BrokerFactory factory, int port) throws IOException {
+		
+		if (port < 0){
+			System.out.println("Invalid port number. Please try again.");
+			return;
+		}
+		
+		ServerSocket serverSocket = new ServerSocket(port);
+		System.out.println("Connection Socket do Lado Servidor estabelecido.");
+		
+		try{
+			while(true){
+				Socket clientSocket = serverSocket.accept();
+				factory.getBroker(new TCPSockConnection(clientSocket)).run();
+			}
+		}finally{
+			serverSocket.close();
+		}
+	}
 }

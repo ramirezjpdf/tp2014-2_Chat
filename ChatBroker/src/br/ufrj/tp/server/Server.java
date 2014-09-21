@@ -8,7 +8,7 @@ import br.ufrj.tp.sockListener.SockListener;
 public class Server {
 
 	private SockListener welcomeSocket;
-	private BrokerFactory brokerFactory; 
+	private BrokerFactory brokerFactory;
 	
 	public Server(SockListener listener) {
 		this.welcomeSocket = listener;
