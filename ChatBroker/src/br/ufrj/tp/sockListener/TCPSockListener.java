@@ -32,7 +32,7 @@ public class TCPSockListener implements SockListener{
 			return;
 		}
 		
-		ServerSocket serverSocket = new ServerSocket(port);
+		ServerSocket serverSocket = new ServerSocket(SockListenerConst.PORT + port);
 		System.out.println("Connection Socket do Lado Servidor estabelecido.");
 		
 		try{
