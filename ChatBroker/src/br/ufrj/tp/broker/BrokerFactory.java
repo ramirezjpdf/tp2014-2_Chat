@@ -12,6 +12,6 @@ public class BrokerFactory {
 	}
 	
 	public int getBrokerquant(){
-		return quantbrokersmade;
+		return quantbrokersmade;;;
 	}
 }
