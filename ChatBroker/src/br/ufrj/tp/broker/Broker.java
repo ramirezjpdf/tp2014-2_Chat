@@ -11,24 +11,30 @@ import java.util.Observer;
 
 import br.ufrj.tp.chat.Chat;
 import br.ufrj.tp.client.Client;
+import br.ufrj.tp.server.Server;
 import br.ufrj.tp.sockConnection.SockConnection;
 
 public class Broker implements Runnable, Observer, Comparable<Broker>{
     private SockConnection sockConn;
     private ArrayList<Client> clients;
-    private Map<String, Chat> myChats;
-    
+    private Server server;
     
     public Broker(SockConnection sockConn) {
-        this(sockConn, null);
+    	this.sockConn = sockConn;
         clients = new ArrayList<Client>(); 
     }
     
-    public Broker(SockConnection sockConn, Client client){
+    public Broker(SockConnection sockConn, Server serv) {
+    	this.sockConn = sockConn;
+        clients = new ArrayList<Client>(); 
+        server = serv;
+    }
+    
+    public Broker(SockConnection sockConn, Server serv, Client client){
     	this.sockConn = sockConn;
     	clients = new ArrayList<Client>();
     	clients.add(client);
-    	this.myChats = new HashMap<String, Chat>();
+    	server = serv;
     }
 
     public void sendMsgToClient(byte[] msg){
@@ -42,21 +48,16 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
     }
     
     public void initiateChatWithMe(Chat chat){
-    	myChats.put(chat.getId(), chat);
+    	server.initiateChat(chat);
     }
     
     public void closeChatWithMe(Chat chat){
-    	myChats.remove(chat.getId());
+    	server.closeChat(chat);
     }
     
     public void createChat(List<Broker> participants){
     	participants.add(this);
-    	Chat newChat = new Chat(participants);
-    	for(Broker broker : participants){
-    		if (broker.equals(this)) continue;
-    		broker.initiateChatWithMe(newChat);
-    	}
-    	myChats.put(newChat.getId(), newChat);
+    	server.createChat(participants);
     }
 
     @Override
