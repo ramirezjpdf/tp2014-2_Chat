@@ -1,40 +1,35 @@
 package br.ufrj.tp.broker;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
 import br.ufrj.tp.chat.Chat;
 import br.ufrj.tp.client.Client;
+import br.ufrj.tp.server.Database;
 import br.ufrj.tp.server.Server;
 import br.ufrj.tp.sockConnection.SockConnection;
 
 public class Broker implements Runnable, Observer, Comparable<Broker>{
     private SockConnection sockConn;
-    private ArrayList<Client> clients;
-    private Server server;
+    private Database db;
     
     public Broker(SockConnection sockConn) {
     	this.sockConn = sockConn;
-        clients = new ArrayList<Client>(); 
     }
     
-    public Broker(SockConnection sockConn, Server serv) {
+    public Broker(SockConnection sockConn, Database db) {
     	this.sockConn = sockConn;
-        clients = new ArrayList<Client>(); 
-        server = serv;
+        this.db = db;
     }
     
     public Broker(SockConnection sockConn, Server serv, Client client){
     	this.sockConn = sockConn;
-    	clients = new ArrayList<Client>();
-    	clients.add(client);
-    	server = serv;
+    	this.db = db;
+    	db.addClient(client);
     }
 
     public void sendMsgToClient(byte[] msg){
@@ -47,17 +42,21 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
     	
     }
     
+    public synchronized Database getDatabase(){
+    	return db;
+    }
+    
     public void initiateChatWithMe(Chat chat){
-    	server.initiateChat(chat);
+    	db.initiateChat(chat);
     }
     
     public void closeChatWithMe(Chat chat){
-    	server.closeChat(chat);
+    	db.closeChat(chat);
     }
     
     public void createChat(List<Broker> participants){
     	participants.add(this);
-    	server.createChat(participants);
+    	db.createChat(participants);
     }
 
     @Override
@@ -67,9 +66,10 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
             sockConn.send("Bem vindo ao Chat de Teleprocessamento!".getBytes());
             sockConn.send("\nPrecisamos do seu nome, pode enviá-lo?".getBytes());
             String msg = new String(sockConn.recv());
-            clients.add(new Client(msg));
+            Client cli = new Client(msg);
+            db.addClient(cli);
             sockConn.send("Lista de usuarios online.\n".toUpperCase().getBytes());
-            for(Client c: clients){
+            for(Client c: db.getClientList()){
             	String mensagem = c.getUsername() + "\n"; 
             	sockConn.send(mensagem.toUpperCase().getBytes());
             }
