@@ -94,7 +94,9 @@ public class Database {
 	
 	public Broker getBroker(String name){
 		for (Broker b: brokers){
-			if (b.getClientname() == name) return b;
+			System.out.println("ccc" + name);
+			System.out.println("ddd" + b.getClientname());
+			if (b.getClientname().compareTo(name) == 0) return b;
 		}
 		return null;
 	}

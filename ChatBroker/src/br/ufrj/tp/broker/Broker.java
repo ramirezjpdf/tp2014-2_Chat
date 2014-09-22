@@ -93,8 +93,8 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
             sockConn.send("Digite o nome de quem deseja conversar\n".getBytes());
             sockConn.send("ou digite WAIT para esperar alguem que queira conversar com voce.\n".getBytes());
             msg = new String(sockConn.recv());
-            //TODO = Consertar gambiarra de break;
-            while (!(db.existeCliente(msg)) && (!msg.equals("WAIT"))){ 
+            //TODO = Retirar gambiarra para funcionar com SocketTest v3.0.0
+            while (!(db.existeCliente(msg)) && (!msg.startsWith("WAIT"))){ 
             	if (msg.equals("WAIT")) break;
             	sockConn.send("Nome nao consta na lista.\n".toUpperCase().getBytes());
             	sockConn.send("Deseja iniciar conversa?\n".toUpperCase().getBytes());
@@ -102,12 +102,12 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
                 sockConn.send("ou digite WAIT para esperar alguem que queira conversar com voce.\n".toUpperCase().getBytes());
             	msg = new String(sockConn.recv());
             }
-            if (msg == "WAIT"){
+            if (msg.startsWith("WAIT")){
             	while(!db.existeChat(getClientname())){}
             } else {
             	ArrayList<Broker> listadechat = new ArrayList<Broker>();
-            	listadechat.add(this);
             	listadechat.add(db.getBroker(msg));
+            	System.out.println("aaa" + listadechat.get(0).getClientname());
             	createChat(listadechat);
             	
             }
