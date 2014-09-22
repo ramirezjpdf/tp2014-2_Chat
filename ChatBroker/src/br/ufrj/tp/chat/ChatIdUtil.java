@@ -7,6 +7,7 @@ import br.ufrj.tp.broker.Broker;
 
 public class ChatIdUtil {
 	public static String generateChatId(List<Broker> participants){
+		//TODO: resolver bug de NullPointerException
 		//Collections.sort(participants);
 		String id = "";
 		for (Broker b : participants){

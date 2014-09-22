@@ -18,6 +18,8 @@ public class Chat {
 	}
 	
 	public void sendMsg(byte[] msg){
+		//No caso da interface própria, limitar envio para com quem se fala ao invés de
+		//ambos os usuários.
 		for(Broker broker : brokerList){
 			broker.sendMsgToClient(msg);
 		}
