@@ -10,7 +10,7 @@ public class ChatIdUtil {
 		Collections.sort(participants);
 		String id = "";
 		for (Broker b : participants){
-			id += b.getClient().getUsername();
+			id += b.getClientname();
 		}
 		return id;
 	}

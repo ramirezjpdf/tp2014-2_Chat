@@ -14,7 +14,6 @@ import br.ufrj.tp.sockListener.SockListener;
 
 public class Server implements Runnable{
 
-	
 	//TODO = Tratar exceções
 	private int i = 0;
 	private ArrayList<Thread> threads;

@@ -12,10 +12,12 @@ public class Database {
 
 	private HashMap<String, Chat> myChats;
 	private ArrayList<Client> clients;
+	private ArrayList<Broker> brokers;
 	
 	public Database(){
 		myChats = new HashMap<String, Chat>();
 		clients = new ArrayList<Client>(); 
+		brokers = new ArrayList<Broker>();
 	}
 	
 	public synchronized void addClient(Client cli){
@@ -42,6 +44,37 @@ public class Database {
 		}
 		return false;
 	}
+	
+	public synchronized boolean existeChat(String nome){
+		
+		for(Chat a: myChats.values()){
+			if ((a.getUser1() == nome) || (a.getUser2() == nome)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public synchronized void addBroker(Broker b){
+		brokers.add(b);
+	}
+	
+	public Broker findBroker(String nome){
+		for (Broker a: brokers){
+			if (a.getClientname() == nome) return a;
+		}
+		return null;
+		
+	}
+	
+	public synchronized Chat getChat(String nome){
+		for(Chat a: myChats.values()){
+			if ((a.getUser1() == nome) || (a.getUser2() == nome)){
+				return a;
+			}
+		}
+		return null;
+	}
 
 	public HashMap<String, Chat> getChats() {
 		return myChats;
@@ -57,6 +90,13 @@ public class Database {
 
 	public void setClients(ArrayList<Client> clients) {
 		this.clients = clients;
+	}
+	
+	public Broker getBroker(String name){
+		for (Broker b: brokers){
+			if (b.getClientname() == name) return b;
+		}
+		return null;
 	}
 	
 	public void initiateChat(Chat chat){

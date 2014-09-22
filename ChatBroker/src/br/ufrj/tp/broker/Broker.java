@@ -16,7 +16,9 @@ import br.ufrj.tp.sockConnection.SockConnection;
 public class Broker implements Runnable, Observer, Comparable<Broker>{
     private SockConnection sockConn;
     private Database db;
-    
+    private Client client;
+    public Chat chatemandamento;
+   
     public Broker(SockConnection sockConn) {
     	this.sockConn = sockConn;
     }
@@ -26,10 +28,11 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
         this.db = db;
     }
     
-    public Broker(SockConnection sockConn, Server serv, Client client){
+    public Broker(SockConnection sockConn, Database db, Server serv, Client client){
     	this.sockConn = sockConn;
     	this.db = db;
     	db.addClient(client);
+    	this.client = client;
     }
 
     public void sendMsgToClient(byte[] msg){
@@ -59,46 +62,62 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
     	db.createChat(participants);
     }
 
+	public String getClientname() {
+		return client.getUsername();
+	}
+
+	public void setClientname(String clientname) {
+		client.setUsername(clientname);
+	} 
+    
     @Override
     public void run() {
         System.out.println("Broker instantiated");
-        String clientname = "";
         try {
+        	String msg;
             sockConn.send("Bem vindo ao Chat de Teleprocessamento!".getBytes());
-            sockConn.send("\nPrecisamos do seu nome, pode enviá-lo?".getBytes());
-            String msg = new String(sockConn.recv());
-            Client cli = new Client(msg);
-            clientname = msg;
-            db.addClient(cli);
-            sockConn.send("Lista de usuarios online.\n".getBytes());
-            for(Client c: db.getClientList()){
-            	String mensagem = c.getUsername(); 
-            	sockConn.send(mensagem.getBytes());
+            if (client == null){
+	            sockConn.send("\nPrecisamos do seu nome, pode enviá-lo?".getBytes());
+	            msg = new String(sockConn.recv());	            
+	            client = new Client(msg);
+	            db.addClient(client);
             }
+            sockConn.send("Lista de usuarios online.\n".getBytes());
+            String mensagem = "";
+            for(Client c: db.getClientList()){
+            	mensagem = mensagem.concat(c.getUsername()); 
+            }
+            System.out.println(mensagem);
+            sockConn.send(mensagem.getBytes());
             sockConn.send("Deseja iniciar conversa?\n".getBytes());
             sockConn.send("Digite o nome de quem deseja conversar\n".getBytes());
             sockConn.send("ou digite WAIT para esperar alguem que queira conversar com voce.\n".getBytes());
             msg = new String(sockConn.recv());
-            while (!(db.existeCliente(msg)) && (msg != "WAIT")){ 
-            	System.out.println(msg);
+            //TODO = Consertar gambiarra de break;
+            while (!(db.existeCliente(msg)) && (!msg.equals("WAIT"))){ 
+            	if (msg.equals("WAIT")) break;
             	sockConn.send("Nome nao consta na lista.\n".toUpperCase().getBytes());
             	sockConn.send("Deseja iniciar conversa?\n".toUpperCase().getBytes());
                 sockConn.send("Digite o nome de quem deseja conversar\n".toUpperCase().getBytes());
                 sockConn.send("ou digite WAIT para esperar alguem que queira conversar com voce.\n".toUpperCase().getBytes());
             	msg = new String(sockConn.recv());
             }
-            /*if (msg == "WAIT"){
+            if (msg == "WAIT"){
+            	while(!db.existeChat(getClientname())){}
+            } else {
+            	ArrayList<Broker> listadechat = new ArrayList<Broker>();
+            	listadechat.add(this);
+            	listadechat.add(db.getBroker(msg));
+            	createChat(listadechat);
             	
-            }*/
-            
-            
+            }
+            chatemandamento = db.getChat(getClientname());
             
             while (!msg.trim().equals("END")){
-                sockConn.send(msg.toUpperCase().getBytes());
-                msg = new String(sockConn.recv());
-                System.out.println("Received from Client: " + msg + " => " + msg.equals("END"));
-                System.out.println("msg.equals(\"END\"): " + msg.trim().equals("END"));
+            	msg = new String(sockConn.recv());
+            	chatemandamento.sendMsg(msg.getBytes());
             }
+            
             System.out.println("Closing broker");
         } catch (IOException e) {
             System.out.println("ERROR - Could not send message from Broker to client");
@@ -129,6 +148,6 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
 		if (getClass() != obj.getClass())
 			return false;
 		return false;
-	} 
+	}
 	
 }
