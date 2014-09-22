@@ -29,6 +29,19 @@ public class Database {
 	public synchronized ArrayList<Client> getClientList(){
 		return clients;
 	}
+	
+	public synchronized boolean existeCliente(String nome){
+		
+		for(Client a: clients){
+			System.out.println(nome + " " + a.getUsername());
+			if (a.getUsername().equals(nome)){
+				System.out.println(a.getUsername().equals(nome));
+				return true;
+			}
+			System.out.println(a.getUsername().equals(nome));
+		}
+		return false;
+	}
 
 	public HashMap<String, Chat> getChats() {
 		return myChats;
