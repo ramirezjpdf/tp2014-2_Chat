@@ -42,7 +42,7 @@ public class Server{
 	public synchronized String getUserList(){
 		String a = "[LISTA]";
 		for (Broker b: brokers){
-			a.concat(b.getClientname() + ";");
+			a = a.concat(b.getClientname() + ";");
 		}
 		return a;
 		
