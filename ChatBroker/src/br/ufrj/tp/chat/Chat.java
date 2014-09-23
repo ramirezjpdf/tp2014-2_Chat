@@ -1,39 +1,32 @@
 package br.ufrj.tp.chat;
 
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import br.ufrj.tp.broker.Broker;
 
 public class Chat {
-	private List<Broker> brokerList;
+	private TreeSet<Broker> brokerset;
 	private String id;
 	private String user1;
 	private String user2;
 
-	public Chat(List<Broker> brokerList){
-		this.brokerList = brokerList;
-		this.id = ChatIdUtil.generateChatId(brokerList);
-		user1 = brokerList.get(0).getClientname();
-		user2 = brokerList.get(1).getClientname();
+	public Chat(TreeSet<Broker> brokerset){
+		this.brokerset = brokerset;
+		this.id = ChatIdUtil.generateChatId(brokerset);
 	}
 	
 	public void sendMsg(byte[] msg){
 		//No caso da interface própria, limitar envio para com quem se fala ao invés de
 		//ambos os usuários.
-		for(Broker broker : brokerList){
+		for(Broker broker : brokerset){
 			broker.sendMsgToClient(msg);
 		}
 	}
 	
 	public String getId() {
 		return id;
-	}
-	
-	public String getUser1(){
-		return user1;
-	}
-	
-	public String getUser2(){
-		return user2;
 	}
 }

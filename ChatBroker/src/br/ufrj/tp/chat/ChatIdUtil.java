@@ -1,12 +1,11 @@
 package br.ufrj.tp.chat;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 import br.ufrj.tp.broker.Broker;
 
 public class ChatIdUtil {
-	public static String generateChatId(List<Broker> participants){
+	public static String generateChatId(Set<Broker> participants){
 		//TODO: resolver bug de NullPointerException
 		//Collections.sort(participants);
 		String id = "";

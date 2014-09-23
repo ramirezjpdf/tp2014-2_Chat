@@ -6,32 +6,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import br.ufrj.tp.chat.Chat;
 import br.ufrj.tp.client.Client;
-import br.ufrj.tp.server.Database;
 import br.ufrj.tp.server.Server;
 import br.ufrj.tp.sockConnection.SockConnection;
 
 public class Broker implements Runnable, Observer, Comparable<Broker>{
     private SockConnection sockConn;
-    private Database db;
+    private BrokerFactory bf;
     private Client client;
     private Chat chatemandamento;
+    
    
     public Broker(SockConnection sockConn) {
     	this.sockConn = sockConn;
+    	this.client = new Client("");
     }
     
-    public Broker(SockConnection sockConn, Database db) {
+    public Broker(SockConnection sockConn, BrokerFactory bf) {
     	this.sockConn = sockConn;
-        this.db = db;
+    	this.client = new Client("");
+    	this.bf = bf;
     }
     
-    public Broker(SockConnection sockConn, Database db, Server serv, Client client){
+    public Broker(SockConnection sockConn, BrokerFactory bf, Client client){
     	this.sockConn = sockConn;
-    	this.db = db;
-    	db.addClient(client);
+    	this.client = new Client("");
+    	this.bf = bf;
     	this.client = client;
     }
 
@@ -45,21 +49,11 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
     	
     }
     
-    public synchronized Database getDatabase(){
-    	return db;
-    }
-    
-    public void initiateChatWithMe(Chat chat){
-    	db.initiateChat(chat);
-    }
-    
-    public void closeChatWithMe(Chat chat){
-    	db.closeChat(chat);
-    }
-    
-    public void createChat(List<Broker> participants){
-    	participants.add(this);
-    	db.createChat(participants);
+    public void createChat(String nome){
+    	TreeSet<Broker> treeset = new TreeSet<Broker>();
+    	treeset.add(this);
+    	treeset.add(bf.getBrokerForChat(nome));
+    	chatemandamento = new Chat(treeset);
     }
 
 	public String getClientname() {
@@ -79,23 +73,15 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
         	
             sockConn.send("Bem vindo ao Chat de Teleprocessamento!".getBytes());
             
-            if (client == null){
+            if ((client == null) || (client.getUsername() == null) || 
+            		(client.getUsername() == "")){
 	            sockConn.send("\nPrecisamos do seu nome, pode enviá-lo?".getBytes());
 	            msg = new String(sockConn.recv());	            
 	            client = new Client(msg);
-	            db.addClient(client);
             }
             
             sockConn.send("Lista de usuarios online.\n".getBytes());
-            String mensagem = "";
-            
-            /* Talvez o concat não seja necessário para substituir
-             * o sockConn.send. Fiz isso porquê aparentemente todos os nomes não apareciam
-             * mas pode ser bug do SocketTest 3.0.0.
-             */
-            for(Client c: db.getClientList()){
-            	mensagem = mensagem.concat(c.getUsername()); 
-            }
+            String mensagem = bf.getUserList();
             
             sockConn.send(mensagem.getBytes());
             sockConn.send("Deseja iniciar conversa?\n".getBytes());
@@ -107,7 +93,7 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
             //loop principal do chat
             while (!msg.startsWith("END")){
 	            //TODO = Retirar gambiarra para funcionar com SocketTest v3.0.0
-	            while (!(db.existeCliente(msg)) && (!msg.startsWith("WAIT"))){ 
+	            while (!(bf.existeCliente(msg)) && (!msg.startsWith("WAIT"))){ 
 	            	if (msg.equals("WAIT")) break;
 	            	sockConn.send("Nome nao consta na lista.\n".toUpperCase().getBytes());
 	            	sockConn.send("Deseja iniciar conversa?\n".toUpperCase().getBytes());
@@ -116,15 +102,11 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
 	            	msg = new String(sockConn.recv());
 	            }
 	            if (msg.startsWith("WAIT")){
-	            	while(!db.existeChat(getClientname())){}
+	            	msg = new String(sockConn.recv());
+	            	while(!msg.startsWith("[CHATCREATED]"));
 	            } else {
-	            	ArrayList<Broker> listadechat = new ArrayList<Broker>();
-	            	listadechat.add(db.getBroker(msg));
-	            	System.out.println("aaa" + listadechat.get(0).getClientname());
-	            	createChat(listadechat);
-	            	
+	            	createChat(msg);
 	            }
-	            chatemandamento = db.getChat(getClientname());
 	            
 	            while (!msg.trim().equals("END")){
 	            	msg = new String(sockConn.recv());
@@ -132,11 +114,8 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
 	            }
 	            
 	            sockConn.send("Lista de usuarios online.\n".getBytes());
-	            mensagem = "";
+	            mensagem = bf.getUserList();
 	            
-	            for(Client c: db.getClientList()){
-	            	mensagem = mensagem.concat(c.getUsername()); 
-	            }
 	            
 	            sockConn.send(mensagem.getBytes());
 	            sockConn.send("Deseja iniciar conversa?\n".getBytes());
@@ -165,7 +144,10 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
     
     @Override
 	public int compareTo(Broker anotherBroker) {
-		return client.getUsername().compareTo(anotherBroker.getClientname());
+    	if (client.getUsername() == null){
+    		return 1;
+    	}else if (anotherBroker.getClientname() == null) return -1;
+    	else return client.getUsername().compareTo(anotherBroker.getClientname());
     }
 
 	@Override

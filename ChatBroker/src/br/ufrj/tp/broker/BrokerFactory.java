@@ -2,24 +2,36 @@ package br.ufrj.tp.broker;
 
 import java.util.ArrayList;
 
-import br.ufrj.tp.server.Database;
+import br.ufrj.tp.server.Server;
 import br.ufrj.tp.sockConnection.SockConnection;
 
 public class BrokerFactory {
 	
-	public Database db;
+	private Server server;
 	private int quantbrokersmade = 0;
 	
 	
-	public BrokerFactory(Database db){
-		this.db = db;
+	public BrokerFactory(Server server){
+		this.server = server;
 	}
 	
 	public Broker getBroker(SockConnection sockConn){
-		quantbrokersmade++;
-		Broker newbroker = new Broker(sockConn, db);
-		db.addBroker(newbroker);
+		Broker newbroker = new Broker(sockConn, this);
+		newbroker.setClientname(null);
+		server.addBroker(newbroker);
 		return newbroker;
+	}
+	
+	public Broker getBrokerForChat(String nome){
+		return server.getBroker(nome);
+	}
+	
+	public String getUserList(){
+		return server.getUserList();
+	}
+	
+	public boolean existeCliente(String nome){
+		return server.existeCliente(nome);
 	}
 	
 	public int getBrokerquant(){

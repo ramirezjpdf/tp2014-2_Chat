@@ -17,9 +17,6 @@ public class MainTestServer {
 		
 		server.start();
 		
-		
-		
-		
 	}
 
 }
