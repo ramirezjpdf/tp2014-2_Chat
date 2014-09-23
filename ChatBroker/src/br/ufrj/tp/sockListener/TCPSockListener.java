@@ -17,7 +17,7 @@ public class TCPSockListener implements SockListener{
 		try{
 			while(true){
 				Socket clientSocket = serverSocket.accept();
-				factory.getBroker(new TCPSockConnection(clientSocket)).run();
+				new Thread(factory.getBroker(new TCPSockConnection(clientSocket))).start();
 			}
 		}finally{
 			serverSocket.close();

@@ -15,7 +15,6 @@ import br.ufrj.tp.sockListener.SockListener;
 public class Server{
 
 	//TODO = Tratar exceções
-	private int i = 0;
 	private SockListener welcomeSocket;
 	private BrokerFactory brokerFactory;
 	private Database data;
@@ -40,7 +39,7 @@ public class Server{
 	
 	public void start()  throws IOException {
 		
-		welcomeSocket.listen(brokerFactory, i);
+		welcomeSocket.listen(brokerFactory);
 		
 	}
 }
