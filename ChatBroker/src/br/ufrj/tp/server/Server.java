@@ -12,31 +12,18 @@ import br.ufrj.tp.chat.Chat;
 import br.ufrj.tp.client.Client;
 import br.ufrj.tp.sockListener.SockListener;
 
-public class Server implements Runnable{
+public class Server{
 
 	//TODO = Tratar exceções
 	private int i = 0;
-	private ArrayList<Thread> threads;
-	private ArrayList<SockListener> welcomeSockets;
+	private SockListener welcomeSocket;
 	private BrokerFactory brokerFactory;
 	private Database data;
 	
 	public Server(SockListener listener) {
-		this.welcomeSockets.add(listener);
+		this.welcomeSocket = listener;
 		data = new Database();
 		this.brokerFactory = new BrokerFactory(data);
-		this.threads = new ArrayList<Thread>();
-		threads.add(new Thread(this));
-	}
-	
-	public Server(ArrayList<SockListener> listener) {
-		this.welcomeSockets = listener;
-		data = new Database();
-		this.brokerFactory = new BrokerFactory(data);
-		this.threads = new ArrayList<Thread>();
-		for(int k =0; k < welcomeSockets.size(); k++){
-			threads.add(new Thread(this));
-		}
 	}
 	
 	public void initiateChat(Chat chat){
@@ -51,28 +38,9 @@ public class Server implements Runnable{
     	data.createChat(participants);
     }
 	
-    //TODO = Proteção decente de acesso aos arrays
-	public void start() throws IOException{
-		for(int j = 0; j < threads.size(); j++){
-			threads.get(j).start();
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			i++;
-		}
-	}
-
-	@Override
-	public void run() {
+	public void start()  throws IOException {
 		
-		try {
-			welcomeSockets.get(i).listen(brokerFactory, i);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		welcomeSocket.listen(brokerFactory, i);
 		
 	}
 }
