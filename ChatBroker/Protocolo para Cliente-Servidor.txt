@@ -1,32 +1,27 @@
+NOVO Protocolo de Cliente-Servidor
+
 Com base no modelo proposto de comunicação entre servidor-broker-cliente...
 
-	-> Cliente A deseja iniciar conversa com Cliente B
-	-> Cliente A deseja encerrar conversa com Cliente B
-	-> Cliente A em conversa com B deseja adicionar o Cliente C à conversa
-	-> Cliente A em conversa com B e C deseja chutar o Cliente C da conversa
-	-> Cliente A em conversa com B e C deseja começar uma conversa separada com o Cliente B
-	-> Cliente A em conversa com B e C deseja terminar uma conversa separada com o Cliente B
-
-	Usando a base do Broker onde ele permanece funcionando até que ele receba a mensagem END...
-
-	...isso vai ter que ficar numa camada fora de alcance textual dos clientes, senão basta escrever END e isso fecha o broker, o que desconecta o cliente do servidor, quase como o "dá ALT+F4" das lan houses de antigamente.
-
-	Supondo que isso vá ficar fora de alcance das caixas de texto, ainda falta considerar o fato de que existirão múltiplas conversas entre os clientes, logo é necessário que cada conversa receba uma ID. Com base nisso...
-
-	-> Cliente A deseja iniciar conversa com Cliente B:
-		"ADD ID *id do Cliente B*"
-
-	-> Cliente A deseja encerrar conversa com Cliente B
-		"END ID *id da conversa com o Cliente B*"
-
-	-> Cliente A em conversa com B deseja adicionar o Cliente C à conversa
-		"ADD CID *id da conversa com o Cliente B* ID *id do Cliente C*" (talvez seja necessário a concordância por parte de todos os envolvidos da conversa)
-
-	-> Cliente A em conversa com B e C deseja chutar o Cliente C da conversa
-		"REMOVE CID *id da conversa com o Cliente B* ID *id do Cliente C*" (mesmo comentário que o acima)
-
-	-> Cliente A em conversa com B e C deseja começar uma conversa separada com o Cliente B
-		"ADD ID *id do Cliente B*" (sim, dá na mesma que se ele quisesse começar uma conversa normalmente)
-
-	-> Cliente A em conversa com B e C deseja terminar uma conversa separada com o Cliente B
-		"END ID *id da conversa com o Cliente B*"
+Mensagem de Chat de Sender para Receiver.
+	[CHAT]Sender;Receiver;Mensagem.
+	
+Lista de clientes no servidor, enviada para os Clientes.
+	[LISTA]Cliente1;Cliente2;Cliente3;...;ClienteN.
+	
+Cliente Sender pede permissão de Cliente Receiver para começar conversa com ele.
+	[CHATASKPERMISSION]Sender;Receiver.
+	
+Cliente Receiver aceita pedido de Cliente  para começar conversa.
+	[CHATGIVESPERMISSION]Receiver;Sender.
+	
+Cliente B recusa pedido de Cliente A para começar conversa.
+	[CHATDENIESPERMISSION]Receiver;Sender.
+	
+Cliente A avisa para Cliente B da criação do Chat para os dois.
+	[CHATCREATED]Sender;Receiver.
+	
+Cliente A encerra conversa com Cliente B.
+	[CHATEND]Sender;Receiver.
+	
+Cliente A encerra conversa com todo mundo.
+	[CHATEND]Sender.
