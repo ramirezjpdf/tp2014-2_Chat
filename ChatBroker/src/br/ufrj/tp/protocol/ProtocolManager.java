@@ -40,7 +40,7 @@ public class ProtocolManager {
 		return wrap(ProtocolAction.CHATDENIESPERMISSION, asked.getUsername(), asker.getUsername());
 	}
 	
-	public byte[] wrapChatCreatedMSg(Client asker, Client asked){
+	public byte[] wrapChatCreatedMsg(Client asker, Client asked){
 		return wrap(ProtocolAction.CHATCREATED, asker.getUsername(), asked.getUsername());
 	}
 	
