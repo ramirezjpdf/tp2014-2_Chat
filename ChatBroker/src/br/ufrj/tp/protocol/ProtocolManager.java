@@ -56,7 +56,13 @@ public class ProtocolManager {
 		String msg = new String(wrappedMsg).trim();
 		ProtocolAction action;
 		
-		String pattern = "^\\[([A-Z]+)\\]";
+		StringBuilder builder = new StringBuilder();
+		for(ProtocolAction a : ProtocolAction.values()){
+			builder.append(a + "|");
+		}
+		builder.deleteCharAt(builder.length() - 1);
+		
+		String pattern = "^\\[(" + builder.toString() + ")\\]";
 		Pattern r = Pattern.compile(pattern);
 		Matcher m = r.matcher(msg);
 		if(m.find()){

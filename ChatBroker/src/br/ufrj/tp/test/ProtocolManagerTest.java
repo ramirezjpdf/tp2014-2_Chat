@@ -116,7 +116,7 @@ public class ProtocolManagerTest {
 		
 		System.out.println("=== Parse Error! No Valid Action! ===");
 		try{
-			pm.parseWrappedMsg(new String("{444}aaa;l;l").getBytes());
+			pm.parseWrappedMsg(new String("[CHET]aaa;l;l").getBytes());
 		}catch(IllegalArgumentException e){
 			System.out.println(e.getMessage());
 		}
