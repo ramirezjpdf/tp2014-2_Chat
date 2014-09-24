@@ -23,7 +23,7 @@ public class ProtocolManagerTest {
 		
 		byte[] chatMSg;
 		System.out.println("### Wrap Chat Msg ###");
-		System.out.println(new String(chatMSg = pm.wrapChatMsg(sender, receiver, "Hello Receiver")));
+		System.out.println(new String(chatMSg = pm.wrapChatMsg(sender, sender.getUsername() + receiver.getUsername(), "Hello Receiver")));
 		System.out.println("#####################");
 		
 		System.out.println("");

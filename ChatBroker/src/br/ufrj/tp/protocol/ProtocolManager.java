@@ -2,7 +2,9 @@ package br.ufrj.tp.protocol;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,8 +20,8 @@ public class ProtocolManager {
 		return builder.toString().getBytes();
 	}
 	
-	public byte[] wrapChatMsg(Client sender, Client receiver, String msg){
-		return wrap(ProtocolAction.CHAT, sender.getUsername(), receiver.getUsername(), msg);
+	public byte[] wrapChatMsg(Client sender, String chatId, String msg){
+		return wrap(ProtocolAction.CHAT, sender.getUsername(), chatId, msg);
 	}
 	
 	public byte[] wrapListMsg(Collection<? extends Client> clients){
@@ -80,7 +82,27 @@ public class ProtocolManager {
 		}
 		
 		List<String> argList = Arrays.asList(arg.split(";"));
-		return new ProtocolMsgParsedObj(action, argList);
+		return new ProtocolMsgParsedObj(action, argList);	
+	}
+	
+	public Set<Client> makeClientSetFromListMsg(ProtocolMsgParsedObj po) throws IllegalArgumentException{
+		if(!po.getAction().equals(ProtocolAction.LIST)){
+			throw new IllegalArgumentException("This parsed object does not correspond to a LIST Msg");
+		}
 		
+		Set<Client> clientSet = new HashSet<Client>();
+		for (String s : po.getArgs()){
+			Client client = new Client(s);
+			clientSet.add(client);
+		}
+		return clientSet;
+	}
+	
+	public ProtocolChatMsg makeProtocolChatMsgObj(ProtocolMsgParsedObj po){
+		if(!po.getAction().equals(ProtocolAction.CHAT)){
+			throw new IllegalArgumentException("This parsed object does not correspond to a CHAT Msg");
+		}
+		
+		return new ProtocolChatMsg(new Client(po.getArgs().get(0)), po.getArgs().get(1), po.getArgs().get(2));
 	}
 }

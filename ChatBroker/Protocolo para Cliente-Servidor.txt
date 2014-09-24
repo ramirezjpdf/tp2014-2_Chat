@@ -2,8 +2,8 @@ NOVO Protocolo de Cliente-Servidor
 
 Com base no modelo proposto de comunicação entre servidor-broker-cliente...
 
-Mensagem de Chat de Sender para Receiver.
-	[CHAT]Sender;Receiver;Mensagem.
+Mensagem de Chat de Sender para Algum Chat.
+	[CHAT]Sender;ChatId;Mensagem.
 	
 Lista de clientes no servidor, enviada para os Clientes.
 	[LIST]Cliente1;Cliente2;Cliente3;...;ClienteN.
