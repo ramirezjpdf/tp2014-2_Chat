@@ -1,6 +1,10 @@
 package br.ufrj.tp.protocol;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import br.ufrj.tp.client.Client;
 
@@ -46,5 +50,31 @@ public class ProtocolManager {
 	
 	public byte[] wrapChatEndMsg(Client sender, String chatId){
 		return wrap(ProtocolAction.CHATEND, sender.getUsername(), chatId);
+	}
+	
+	public ProtocolMsgParsedObj parseWrappedMsg(byte[] wrappedMsg) throws IllegalArgumentException{
+		String msg = new String(wrappedMsg).trim();
+		ProtocolAction action;
+		
+		String pattern = "^\\[([A-Z]+)\\]";
+		Pattern r = Pattern.compile(pattern);
+		Matcher m = r.matcher(msg);
+		if(m.find()){
+			action = ProtocolAction.valueOf(m.group(1));
+		}
+		else{
+			throw new IllegalArgumentException("The wrappedMSg passed as argument does not have a correspondent ProtocolAction");
+		}
+		
+		String arg;
+		try{
+			arg = msg.split(pattern)[1];
+		}catch(IndexOutOfBoundsException e){
+			throw new IllegalArgumentException("The wrappedMSg passed as argument does not have arguments");
+		}
+		
+		List<String> argList = Arrays.asList(arg.split(";"));
+		return new ProtocolMsgParsedObj(action, argList);
+		
 	}
 }
