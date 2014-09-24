@@ -6,22 +6,19 @@ Mensagem de Chat de Sender para Receiver.
 	[CHAT]Sender;Receiver;Mensagem.
 	
 Lista de clientes no servidor, enviada para os Clientes.
-	[LISTA]Cliente1;Cliente2;Cliente3;...;ClienteN.
+	[LIST]Cliente1;Cliente2;Cliente3;...;ClienteN.
 	
 Cliente Sender pede permissão de Cliente Receiver para começar conversa com ele.
-	[CHATASKPERMISSION]Sender;Receiver.
+	[CHATASKPERMISSION]ClientAsker;ClientAsked.
 	
 Cliente Receiver aceita pedido de Cliente  para começar conversa.
-	[CHATGIVESPERMISSION]Receiver;Sender.
+	[CHATGIVESPERMISSION]ClientAsked;ClientAsker.
 	
 Cliente B recusa pedido de Cliente A para começar conversa.
-	[CHATDENIESPERMISSION]Receiver;Sender.
+	[CHATDENIESPERMISSION]ClientAsked;ClientAsker.
 	
 Cliente A avisa para Cliente B da criação do Chat para os dois.
-	[CHATCREATED]Sender;Receiver.
+	[CHATCREATED]ClientAsker;ClientAsked.
 	
-Cliente A encerra conversa com Cliente B.
-	[CHATEND]Sender;Receiver.
-	
-Cliente A encerra conversa com todo mundo.
-	[CHATEND]Sender.
+Cliente A sai do chat
+	[CHATEND]Sender;ChatID.
