@@ -58,7 +58,7 @@ public class ProtocolManager {
 		
 		StringBuilder builder = new StringBuilder();
 		for(ProtocolAction a : ProtocolAction.values()){
-			builder.append(a + "|");
+			builder.append(a.name() + "|");
 		}
 		builder.deleteCharAt(builder.length() - 1);
 		
