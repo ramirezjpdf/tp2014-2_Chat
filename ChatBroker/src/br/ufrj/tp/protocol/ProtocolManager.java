@@ -27,4 +27,24 @@ public class ProtocolManager {
 		}
 		return wrap(ProtocolAction.LIST, clientUsernames);
 	}
+	
+	public byte[] wrapChatAskPermissionMsg(Client asker, Client asked){
+		return wrap(ProtocolAction.CHATASKPERMISSION, asker.getUsername(), asked.getUsername());
+	}
+	
+	public byte[] wrapChatGivesPermissionMsg(Client asked, Client asker){
+		return wrap(ProtocolAction.CHATGIVESPERMISSION, asked.getUsername(), asker.getUsername());
+	}
+	
+	public byte[] wrapChatDeniesPermissionMsg(Client asked, Client asker){
+		return wrap(ProtocolAction.CHATDENIESPERMISSION, asked.getUsername(), asker.getUsername());
+	}
+	
+	public byte[] wrapChatCreatedMSg(Client asker, Client asked){
+		return wrap(ProtocolAction.CHATCREATED, asker.getUsername(), asked.getUsername());
+	}
+	
+	public byte[] wrapChatEndMsg(Client sender, String chatId){
+		return wrap(ProtocolAction.CHATEND, sender.getUsername(), chatId);
+	}
 }
