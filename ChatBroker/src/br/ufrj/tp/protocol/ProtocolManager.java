@@ -134,4 +134,11 @@ public class ProtocolManager {
 		}
 		return new ProtocolChatCreatedMsg(chatId, clientSet);
 	}
+	
+	public ProtocolChatGivesPermissionMsg makeProtocolChatGivesPermissionMsgObj(ProtocolMsgParsedObj po) throws IllegalArgumentException{
+		if(!po.getAction().equals(ProtocolAction.CHATGIVESPERMISSION)){
+			throw new IllegalArgumentException("This parsed object does not correspond to a " + ProtocolAction.CHATGIVESPERMISSION + " Msg");
+		}
+		return new ProtocolChatGivesPermissionMsg(new Client(po.getArgs().get(0)), new Client(po.getArgs().get(1)));
+	}
 }
