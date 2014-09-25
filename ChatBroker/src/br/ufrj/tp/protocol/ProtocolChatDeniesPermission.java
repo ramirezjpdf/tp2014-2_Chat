@@ -2,12 +2,12 @@ package br.ufrj.tp.protocol;
 
 import br.ufrj.tp.client.Client;
 
-public class ProtocolDeniesChatPermission {
+public class ProtocolChatDeniesPermission {
 
 	private Client asked;
 	private Client asker;
 
-	public ProtocolDeniesChatPermission(Client asked, Client asker) {
+	public ProtocolChatDeniesPermission(Client asked, Client asker) {
 		this.asked = asked;
 		this.asker = asker;
 	}
