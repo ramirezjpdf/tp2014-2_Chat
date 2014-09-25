@@ -1,4 +1,4 @@
-package br.ufrj.tp.client;
+package br.ufrj.tp.view.gui;
 
 import java.awt.EventQueue;
 
@@ -8,8 +8,11 @@ import javax.swing.JList;
 import javax.swing.JProgressBar;
 import javax.swing.JButton;
 import javax.swing.AbstractAction;
+
 import java.awt.event.ActionEvent;
+
 import javax.swing.Action;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -92,7 +95,7 @@ public class ClientChatList {
 		btnAskForChat.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				//código para começar conversa
+				//cï¿½digo para comeï¿½ar conversa
 				clist.getFrame().setVisible(false);
 				dlist.getFrame().setVisible(true);
 			}

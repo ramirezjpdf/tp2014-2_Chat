@@ -1,10 +1,9 @@
-package br.ufrj.tp.client;
+package br.ufrj.tp.view.gui;
 
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
-import junit.framework.Test;
 
 import javax.swing.JLabel;
 
@@ -21,6 +20,7 @@ import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 
 import javax.swing.Action;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 

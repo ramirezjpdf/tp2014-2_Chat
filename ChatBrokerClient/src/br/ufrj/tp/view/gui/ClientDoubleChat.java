@@ -1,4 +1,4 @@
-package br.ufrj.tp.client;
+package br.ufrj.tp.view.gui;
 
 import java.awt.EventQueue;
 
@@ -7,10 +7,13 @@ import javax.swing.JPanel;
 import javax.swing.JList;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
