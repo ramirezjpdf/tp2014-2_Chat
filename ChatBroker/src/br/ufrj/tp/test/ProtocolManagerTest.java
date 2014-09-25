@@ -59,7 +59,7 @@ public class ProtocolManagerTest {
 		
 		byte[] chatCreatedMsg;
 		System.out.println("### Wrap Chat Created Msg ###");
-		System.out.println(new String(chatCreatedMsg = pm.wrapChatCreatedMsg(Arrays.asList(asker, asked))));
+		System.out.println(new String(chatCreatedMsg = pm.wrapChatCreatedMsg(asker.getUsername() + asked.getUsername(), Arrays.asList(asker, asked))));
 		System.out.println("#############################");
 		
 		System.out.println("");

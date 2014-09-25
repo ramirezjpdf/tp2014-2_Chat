@@ -46,14 +46,15 @@ public class ProtocolManager {
 		return wrap(ProtocolAction.CHATDENIESPERMISSION, asked.getUsername(), asker.getUsername());
 	}
 	
-	public byte[] wrapChatCreatedMsg(Collection<? extends Client> clients){
-		String [] clientUsernames = new String[clients.size()];
-		int i = 0;
+	public byte[] wrapChatCreatedMsg(String chatId, Collection<? extends Client> clients){
+		String [] arguments = new String[clients.size() + 1];
+		arguments[0] = chatId; 
+		int i = 1;
 		for (Client client : clients){
-			clientUsernames[i] = client.getUsername();
+			arguments[i] = client.getUsername();
 			i++;
 		}
-		return wrap(ProtocolAction.CHATCREATED, clientUsernames);
+		return wrap(ProtocolAction.CHATCREATED, arguments);
 	}
 	
 	public byte[] wrapChatEndMsg(Client sender, String chatId){
@@ -118,5 +119,19 @@ public class ProtocolManager {
 		}
 		
 		return new ProtocolChatEndMsg(new Client(po.getArgs().get(0)), po.getArgs().get(1));
+	}
+	
+	public ProtocolChatCreatedMsg makeProtocolChatCreatedMsgObj(ProtocolMsgParsedObj po) throws IllegalArgumentException{
+		if(!po.getAction().equals(ProtocolAction.CHATCREATED)){
+			throw new IllegalArgumentException("This parsed object does not correspond to a " + ProtocolAction.CHATCREATED + " Msg");
+		}
+		
+		String chatId = po.getArgs().get(0);
+		Set<Client> clientSet = new HashSet<Client>();
+		for (int i = 1; i < po.getArgs().size(); i++){
+			Client client = new Client(po.getArgs().get(i));
+			clientSet.add(client);
+		}
+		return new ProtocolChatCreatedMsg(chatId, clientSet);
 	}
 }
