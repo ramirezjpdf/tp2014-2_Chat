@@ -16,7 +16,7 @@ public class Server{
 	
 	public Server(SockListener listener) {
 		this.welcomeSocket = listener;
-		this.brokerFactory = new BrokerFactory(this);
+		this.brokerFactory = new BrokerFactory();
 		this.onlineBrokers = new ObservableSet<Broker>(new HashSet<Broker>());
 	}
     

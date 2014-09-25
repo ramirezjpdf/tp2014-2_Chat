@@ -30,19 +30,6 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
 		this.onlineClients = new HashSet<Client>();
 	}
 
-	public Broker(SockConnection sockConn, BrokerFactory bf) {
-		this.sockConn = sockConn;
-		this.client = new Client("");
-		this.bf = bf;
-	}
-
-	public Broker(SockConnection sockConn, BrokerFactory bf, Client client){
-		this.sockConn = sockConn;
-		this.client = new Client("");
-		this.bf = bf;
-		this.client = client;
-	}
-
 	public void sendMsgToClient(byte[] msg){
 		try{
 			sockConn.send(msg);
@@ -158,6 +145,7 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
 	
 	private void sendListOfOnlineClients() {
 		ProtocolManager po = new ProtocolManager();
+		System.out.println("Sending online clients: " + onlineClients);
 		byte[] msg = po.wrapListMsg(onlineClients);
 		sendMsgToClient(msg);
 	}
@@ -165,8 +153,8 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
 	@Override
 	public void update(Observable obs, Object arg){
 		//FIXME Do a safe cast here!
-		ObservableSet<Broker> onlineBrokers = (ObservableSet<Broker>)arg;
-		
+		ObservableSet<Broker> onlineBrokers = (ObservableSet<Broker>)obs;
+		System.out.println("SERVER ONLINE BROKERS SIZE: " + onlineBrokers.size());
 		onlineClients = new HashSet<Client>();
 
 		for (Iterator<Broker> iter = onlineBrokers.iterator(); iter.hasNext();) {
@@ -174,7 +162,7 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
 			onlineClients.add(broker.client);
 		}
 		
-		sendListOfOnlineClients();		
+		if (!client.getUsername().isEmpty()) sendListOfOnlineClients();		
 	}
 
 
