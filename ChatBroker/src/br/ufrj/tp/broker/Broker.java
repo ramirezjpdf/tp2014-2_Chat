@@ -69,24 +69,10 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
 		System.out.println("Broker instantiated");
 
 		ProtocolManager protocolManager = new ProtocolManager();
-		sendMsgToClient(protocolManager.wrapConnectionStatusMsg("OK"));
-		
-		byte[] msg = null;
-		try {
-			msg = sockConn.recv();
-		} catch (IOException e) {
-			System.out.println("ERROR - Could not receive login message from Client");
-			//TODO Handle
-		}
-		
-		ProtocolMsgParsedObj po = protocolManager.parseWrappedMsg(msg);
-		if (po.getAction() == ProtocolAction.CHATLOGIN) {
-			handleCaseChatLogin(po);
-		}else {
-			//TODO throws Exception 
-		}
+		ProtocolMsgParsedObj po;
+		handshake(protocolManager);
 
-		
+		byte[] msg = null;
 		while(true){
 			try{
 				msg = sockConn.recv();
@@ -114,7 +100,28 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
 				case CHATDENIESPERMISSION:
 					handleCaseChatDeniesPermission(protocolManager, po);
 					break;
+				default:
+					break;
 			}
+		}
+	}
+
+	private void handshake(ProtocolManager protocolManager) {
+		sendMsgToClient(protocolManager.wrapConnectionStatusMsg("OK"));
+		
+		byte[] msg = null;
+		try {
+			msg = sockConn.recv();
+		} catch (IOException e) {
+			System.out.println("ERROR - Could not receive login message from Client");
+			//TODO Handle
+		}
+		
+		ProtocolMsgParsedObj po = protocolManager.parseWrappedMsg(msg);
+		if (po.getAction() == ProtocolAction.CHATLOGIN) {
+			handleCaseChatLogin(po);
+		}else {
+			//TODO throws Exception 
 		}
 	}
 
@@ -150,6 +157,7 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
 
 	private void handleCaseChatLogin(ProtocolMsgParsedObj po) {
 		client.setUsername(po.getArgs().get(0));
+		
 	}
 
 	@Override
