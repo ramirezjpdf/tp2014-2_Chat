@@ -45,6 +45,7 @@ public class MainController {
 			remoteManager.handshake(new ProtocolManager());
 		}catch(IOException e){
 			System.out.println("Error during handshake");
+			System.out.println(e.getMessage());
 			System.exit(1);
 		}
 		chatManager.setRemoteManager(remoteManager);

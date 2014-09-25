@@ -27,8 +27,7 @@ public class RemoteManager implements Runnable{
 		byte[] statusMsg = sockConn.recv();
 		ProtocolMsgParsedObj parsedObj = protocolManager.parseWrappedMsg(statusMsg);
 		if(!(parsedObj.getAction().equals(ProtocolAction.CONNECTION) || !parsedObj.getArgs().get(0).equals("OK"))){
-			System.out.println("ERROR on estabilishing connection with server");
-			System.exit(1);
+			throw new IOException("ERROR on estabilishing connection with server");
 		}
 		
 		byte[] chatLoginMsg = protocolManager.wrapChatLoginMsg(chatManager.getClient());
