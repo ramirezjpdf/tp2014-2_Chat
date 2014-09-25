@@ -19,6 +19,7 @@ public class UDPSockListener implements SockListener{
 				DatagramPacket recvPkg = new DatagramPacket(recvData, recvData.length);
 				serverSocket.receive(recvPkg);
 				factory.getBroker(new UDPSockConnection(recvPkg)).run();
+				//TODO Como add novo Broker na lista de Brokers do Server???
 			}
 		}finally{
 			serverSocket.close();

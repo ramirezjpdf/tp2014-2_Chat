@@ -1,12 +1,11 @@
 package br.ufrj.tp.broker;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.TreeMap;
+import java.util.Set;
 import java.util.TreeSet;
 
 import br.ufrj.tp.chat.Chat;
@@ -14,19 +13,21 @@ import br.ufrj.tp.client.Client;
 import br.ufrj.tp.protocol.ProtocolAction;
 import br.ufrj.tp.protocol.ProtocolManager;
 import br.ufrj.tp.protocol.ProtocolMsgParsedObj;
-import br.ufrj.tp.server.Server;
 import br.ufrj.tp.sockConnection.SockConnection;
+import br.ufrj.tp.utils.ObservableSet;
 
 public class Broker implements Runnable, Observer, Comparable<Broker>{
 	private SockConnection sockConn;
 	private BrokerFactory bf;
 	private Client client;
 	private Chat chatemandamento;
+	private Set<Client> onlineClients;
 
 
 	public Broker(SockConnection sockConn) {
 		this.sockConn = sockConn;
 		this.client = new Client("");
+		this.onlineClients = new HashSet<Client>();
 	}
 
 	public Broker(SockConnection sockConn, BrokerFactory bf) {
@@ -70,8 +71,10 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
 
 		ProtocolManager protocolManager = new ProtocolManager();
 		ProtocolMsgParsedObj po;
+		
 		handshake(protocolManager);
-
+		sendListOfOnlineClients();
+		
 		byte[] msg = null;
 		while(true){
 			try{
@@ -159,14 +162,28 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
 		client.setUsername(po.getArgs().get(0));
 		
 	}
+	
+	private void sendListOfOnlineClients() {
+		ProtocolManager po = new ProtocolManager();
+		byte[] msg = po.wrapListMsg(onlineClients);
+		sendMsgToClient(msg);
+	}
 
 	@Override
 	public void update(Observable obs, Object arg){
-		//TODO update client with the new client added in the server's client list
+		//FIXME Do a safe cast here!
+		ObservableSet<Broker> onlineBrokers = (ObservableSet<Broker>)arg;
+		
+		onlineClients = new HashSet<Client>();
 
-
+		for (Iterator<Broker> iter = onlineBrokers.iterator(); iter.hasNext();) {
+			Broker broker = (Broker)iter.next();
+			onlineClients.add(broker.client);
+		}
+		
+		sendListOfOnlineClients();		
 	}
-	
+
 
 	@Override
 	public int compareTo(Broker anotherBroker) {

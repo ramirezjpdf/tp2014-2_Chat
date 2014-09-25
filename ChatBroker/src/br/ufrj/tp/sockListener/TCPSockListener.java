@@ -39,6 +39,7 @@ public class TCPSockListener implements SockListener{
 			while(true){
 				Socket clientSocket = serverSocket.accept();
 				factory.getBroker(new TCPSockConnection(clientSocket)).run();
+				//TODO Como add novo Broker na lista de Brokers do Server???
 			}
 		}finally{
 			serverSocket.close();
