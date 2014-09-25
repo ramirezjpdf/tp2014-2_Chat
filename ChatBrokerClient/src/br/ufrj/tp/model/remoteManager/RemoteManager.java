@@ -3,11 +3,12 @@ package br.ufrj.tp.model.remoteManager;
 import java.io.IOException;
 
 import br.ufrj.tp.model.chat.ChatManager;
-import br.ufrj.tp.protocol.ProtocolChatCreatedMsg;
-import br.ufrj.tp.protocol.ProtocolChatEndMsg;
+import br.ufrj.tp.protocol.ProtocolAction;
 import br.ufrj.tp.protocol.ProtocolChatAskPermission;
-import br.ufrj.tp.protocol.ProtocolChatMsg;
+import br.ufrj.tp.protocol.ProtocolChatCreatedMsg;
 import br.ufrj.tp.protocol.ProtocolChatDeniesPermission;
+import br.ufrj.tp.protocol.ProtocolChatEndMsg;
+import br.ufrj.tp.protocol.ProtocolChatMsg;
 import br.ufrj.tp.protocol.ProtocolManager;
 import br.ufrj.tp.protocol.ProtocolMsgParsedObj;
 import br.ufrj.tp.sockConnection.SockConnection;
@@ -23,8 +24,18 @@ public class RemoteManager implements Runnable{
 	
 	
 	public void handshake(ProtocolManager protocolManager) throws IOException{
+		byte[] statusMsg = sockConn.recv();
+		ProtocolMsgParsedObj parsedObj = protocolManager.parseWrappedMsg(statusMsg);
+		if(!(parsedObj.getAction().equals(ProtocolAction.CONNECTION) || !parsedObj.getArgs().get(0).equals("OK"))){
+			System.out.println("ERROR on estabilishing connection with server");
+			System.exit(1);
+		}
+		
+		byte[] chatLoginMsg = protocolManager.wrapChatLoginMsg(chatManager.getClient());
+		sockConn.send(chatLoginMsg);
+		
 		byte[] listMsg = sockConn.recv();
-		ProtocolMsgParsedObj parsedObj = protocolManager.parseWrappedMsg(listMsg);
+		parsedObj = protocolManager.parseWrappedMsg(listMsg);
 		try{
 			chatManager.setClientSet(protocolManager.makeClientSetFromListMsg(parsedObj));
 		}catch(IllegalArgumentException e){
