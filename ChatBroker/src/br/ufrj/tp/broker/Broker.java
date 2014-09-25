@@ -53,13 +53,6 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
 
 	}
 
-	public void createChat(String nome){
-		TreeSet<Broker> treeset = new TreeSet<Broker>();
-		treeset.add(this);
-		treeset.add(bf.getBrokerForChat(nome));
-		chatemandamento = new Chat(treeset);
-	}
-
 	public String getClientName() {
 		return client.getUsername();
 	}

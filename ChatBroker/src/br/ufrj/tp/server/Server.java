@@ -10,63 +10,29 @@ import br.ufrj.tp.utils.ObservableSet;
 
 public class Server{
 
-	//TODO = Tratar exceções
 	private SockListener welcomeSocket;
 	private BrokerFactory brokerFactory;
-	private ObservableSet<Broker> brokers;
+	private ObservableSet<Broker> onlineBrokers;
 	
 	public Server(SockListener listener) {
 		this.welcomeSocket = listener;
 		this.brokerFactory = new BrokerFactory(this);
-		this.brokers = new ObservableSet<Broker>(new HashSet<Broker>());
+		this.onlineBrokers = new ObservableSet<Broker>(new HashSet<Broker>());
 	}
-	
-//	public Broker getBroker(String name){
-//		for (Broker b: brokers){
-//			if (b.getClientName().compareTo(name) == 0) return b;
-//		}
-//		return null;
-//	}
     
     public synchronized void addBroker(Broker broker){
-		brokers.add(broker);
+		onlineBrokers.add(broker);
 	}
 	
 	public synchronized void removeBroker(Broker broker){
-		brokers.remove(broker);
+		onlineBrokers.remove(broker);
 	}
 	
 	public synchronized ObservableSet<Broker> getBrokers(){
-		return brokers;
+		return onlineBrokers;
 	}
     
-//	public synchronized String getUserList(){
-//		String a = "[LISTA]";
-//		for (Broker b: brokers){
-//			a = a.concat(b.getClientName() + ";");
-//		}
-//		return a;
-//		
-//	}
-	
-//	public synchronized boolean existeCliente(String nome){
-//		
-//		for(Broker a: brokers){
-//			//Versão para quando não usarmos mais SocketTest
-//			//if (a.getClientname().equals(nome)){
-//			
-//			//Versão gambiarra
-//			if ((a == null) || (a.getClientName() == null)) return false;
-//			if (a.getClientName().startsWith(nome)){
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
-//	
 	public void start()  throws IOException {
-		
-		welcomeSocket.listen(brokerFactory);
-		
+		welcomeSocket.listen(brokerFactory, onlineBrokers);	
 	}
 }
