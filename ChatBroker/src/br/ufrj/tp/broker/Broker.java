@@ -113,10 +113,12 @@ public class Broker implements Runnable, Observer, Comparable<Broker>{
 			//TODO Handle
 		}
 		
+		System.out.println(msg + "SGAGASGASKGKASJG");
 		ProtocolMsgParsedObj po = protocolManager.parseWrappedMsg(msg);
 		if (po.getAction() == ProtocolAction.CHATLOGIN) {
 			handleCaseChatLogin(po);
 		}else {
+			System.out.println(msg);
 			//TODO throws Exception 
 		}
 	}

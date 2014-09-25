@@ -21,6 +21,9 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.Action;
 
+import br.ufrj.tp.controller.MainController;
+import br.ufrj.tp.utils.SocketUtils;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -30,6 +33,7 @@ public class ClientGUI {
 	private JTextField textFieldUsername;
 	private static ClientGUI window;
 	private static ClientChatList clist;
+	public static MainController controller;
 
 	/**
 	 * Launch the application.
@@ -38,6 +42,7 @@ public class ClientGUI {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					controller = new MainController();
 					window = new ClientGUI();
 					window.getFrmClient().setVisible(true);
 					clist = new ClientChatList(window);
@@ -54,6 +59,7 @@ public class ClientGUI {
 	 */
 	public ClientGUI() {
 		initialize();
+		//Connect com servidor
 	}
 
 	/**
@@ -81,7 +87,11 @@ public class ClientGUI {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				
-				if (textFieldUsername.getText() != ""){
+				if (textFieldUsername.getText().compareTo("") != 0){
+					controller.initiateConnection(textFieldUsername.getText(), SocketUtils.TransportProtocol.TCP);
+					//se conexão der certo, ok
+					//senão, avisar
+					
 					//Codigo para criacao de cliente.
 					if (clist == null) clist = new ClientChatList(window);
 					window.getFrmClient().setVisible(false);
