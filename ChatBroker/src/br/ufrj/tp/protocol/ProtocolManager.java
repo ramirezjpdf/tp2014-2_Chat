@@ -16,7 +16,7 @@ public class ProtocolManager {
 		for (String s : args){
 			builder.append(s + ";");
 		}
-		builder.deleteCharAt(builder.length() - 1);
+		if (args.length != 0) builder.deleteCharAt(builder.length() - 1);
 		return builder.toString().getBytes();
 	}
 	
