@@ -1,6 +1,8 @@
 package br.ufrj.tp.protocol;
 
 public enum ProtocolAction {
+	CONNECTION,
+	CHATLOGIN,
 	CHAT,
 	LIST,
 	CHATASKPERMISSION,

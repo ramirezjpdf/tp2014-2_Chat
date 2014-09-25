@@ -22,7 +22,7 @@ public class Server{
 	
 	public Broker getBroker(String name){
 		for (Broker b: brokers){
-			if (b.getClientname().compareTo(name) == 0) return b;
+			if (b.getClientName().compareTo(name) == 0) return b;
 		}
 		return null;
 	}
@@ -42,7 +42,7 @@ public class Server{
 	public synchronized String getUserList(){
 		String a = "[LISTA]";
 		for (Broker b: brokers){
-			a = a.concat(b.getClientname() + ";");
+			a = a.concat(b.getClientName() + ";");
 		}
 		return a;
 		
@@ -55,8 +55,8 @@ public class Server{
 			//if (a.getClientname().equals(nome)){
 			
 			//Versão gambiarra
-			if ((a == null) || (a.getClientname() == null)) return false;
-			if (a.getClientname().startsWith(nome)){
+			if ((a == null) || (a.getClientName() == null)) return false;
+			if (a.getClientName().startsWith(nome)){
 				return true;
 			}
 		}
