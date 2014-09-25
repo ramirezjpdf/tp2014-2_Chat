@@ -22,7 +22,7 @@ public class RemoteManager implements Runnable{
 	}
 	
 	
-	private void handshake(ProtocolManager protocolManager) throws IOException{
+	public void handshake(ProtocolManager protocolManager) throws IOException{
 		byte[] listMsg = sockConn.recv();
 		ProtocolMsgParsedObj parsedObj = protocolManager.parseWrappedMsg(listMsg);
 		try{
@@ -34,14 +34,7 @@ public class RemoteManager implements Runnable{
 
 	@Override
 	public void run() {
-		ProtocolManager protocolManager = new ProtocolManager();
-		try{
-			handshake(protocolManager);
-		}catch(IOException e){
-			System.err.println(e.getMessage());
-			System.exit(1);
-		}
-		
+		ProtocolManager protocolManager = new ProtocolManager();		
 		byte[] msg = null;
 		while(true){
 			try{
