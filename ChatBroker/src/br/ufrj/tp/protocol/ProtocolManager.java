@@ -61,6 +61,14 @@ public class ProtocolManager {
 		return wrap(ProtocolAction.CHATEND, sender.getUsername(), chatId);
 	}
 	
+	public byte[] wrapConnectionStatusMsg(String status){
+		return wrap(ProtocolAction.CONNECTION, status);
+	}
+	
+	public byte[] wrapChatLoginMsg(Client client){
+		return wrap(ProtocolAction.CHATLOGIN, client.getUsername());
+	}
+	
 	public ProtocolMsgParsedObj parseWrappedMsg(byte[] wrappedMsg) throws IllegalArgumentException{
 		String msg = new String(wrappedMsg).trim();
 		ProtocolAction action;
@@ -167,6 +175,7 @@ public class ProtocolManager {
 		}
 		return new ProtocolChatGivesPermissionMsg(new Client(po.getArgs().get(0)), new Client(po.getArgs().get(1)));
 	}
+	
 	
 	
 }
