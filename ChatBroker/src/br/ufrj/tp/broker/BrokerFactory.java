@@ -17,7 +17,6 @@ public class BrokerFactory {
 	
 	public Broker getBroker(SockConnection sockConn){
 		Broker newbroker = new Broker(sockConn, this);
-		newbroker.setClientname(null);
 		server.addBroker(newbroker);
 		return newbroker;
 	}
