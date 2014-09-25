@@ -16,6 +16,6 @@ public class MainConsoleView {
 	public void initiateConnection(){
 		System.out.println("Enter with your username: ");
 		String username = scan.nextLine();
-		
+		controller.initiateConnection(username);
 	}
 }
