@@ -135,7 +135,7 @@ public class ProtocolManager {
 		return new ProtocolChatCreatedMsg(chatId, clientSet);
 	}
 
-	public ProtocolAskChatPermission makeProtocolAskChatPermission(ProtocolMsgParsedObj po) {
+	public ProtocolChatAskPermission makeProtocolChatAskPermission(ProtocolMsgParsedObj po) {
 		if(!po.getAction().equals(ProtocolAction.CHATASKPERMISSION)){
 			throw new IllegalArgumentException("This parsed object does not correspond to a " + ProtocolAction.CHATASKPERMISSION + " Msg");
 		}
@@ -147,10 +147,10 @@ public class ProtocolManager {
 			askedClientsSet.add(client);
 		}
 		
-		return new ProtocolAskChatPermission(asker, askedClientsSet);
+		return new ProtocolChatAskPermission(asker, askedClientsSet);
 	}
 
-	public ProtocolDeniesChatPermission makeProtocolDeniesChatPermission(ProtocolMsgParsedObj po) {
+	public ProtocolChatDeniesPermission makeProtocolChatDeniesPermission(ProtocolMsgParsedObj po) {
 		if(!po.getAction().equals(ProtocolAction.CHATDENIESPERMISSION)){
 			throw new IllegalArgumentException("This parsed object does not correspond to a " + ProtocolAction.CHATDENIESPERMISSION + " Msg");
 		}
@@ -158,7 +158,7 @@ public class ProtocolManager {
 		Client asked = new Client(po.getArgs().get(0));
 		Client asker = new Client(po.getArgs().get(1));
 		
-		return new ProtocolDeniesChatPermission(asked, asker);
+		return new ProtocolChatDeniesPermission(asked, asker);
 	}
 	
 	public ProtocolChatGivesPermissionMsg makeProtocolChatGivesPermissionMsgObj(ProtocolMsgParsedObj po) throws IllegalArgumentException{
@@ -167,4 +167,6 @@ public class ProtocolManager {
 		}
 		return new ProtocolChatGivesPermissionMsg(new Client(po.getArgs().get(0)), new Client(po.getArgs().get(1)));
 	}
+	
+	
 }
