@@ -29,12 +29,13 @@ public class RemoteManager implements Runnable{
 		if(!(parsedObj.getAction().equals(ProtocolAction.CONNECTION) || !parsedObj.getArgs().get(0).equals("OK"))){
 			throw new IOException("ERROR on estabilishing connection with server");
 		}
-		
 		byte[] chatLoginMsg = protocolManager.wrapChatLoginMsg(chatManager.getClient());
 		sockConn.send(chatLoginMsg);
 		
 		byte[] listMsg = sockConn.recv();
 		parsedObj = protocolManager.parseWrappedMsg(listMsg);
+		System.out.println("Received client List!");
+		System.out.println(protocolManager.makeClientSetFromListMsg(parsedObj));
 		try{
 			chatManager.setClientSet(protocolManager.makeClientSetFromListMsg(parsedObj));
 		}catch(IllegalArgumentException e){
