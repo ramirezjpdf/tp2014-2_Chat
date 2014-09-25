@@ -2,8 +2,9 @@ package br.ufrj.tp.model.remoteManager;
 
 import java.io.IOException;
 
-import br.ufrj.tp.client.Client;
 import br.ufrj.tp.model.chat.ChatManager;
+import br.ufrj.tp.protocol.ProtocolChatCreatedMsg;
+import br.ufrj.tp.protocol.ProtocolChatEndMsg;
 import br.ufrj.tp.protocol.ProtocolChatMsg;
 import br.ufrj.tp.protocol.ProtocolManager;
 import br.ufrj.tp.protocol.ProtocolMsgParsedObj;
@@ -85,29 +86,41 @@ public class RemoteManager implements Runnable{
 	private void handleCaseChat(ProtocolManager protocolManager, ProtocolMsgParsedObj parsedObject){
 		try{
 			ProtocolChatMsg protocolChatMsgObject = protocolManager.makeProtocolChatMsgObj(parsedObject);
+			chatManager.forwardMsgoClientSideChat(protocolChatMsgObject);
 		}catch(IllegalArgumentException e){
-			System.out.println("Error when trying to get a list of the current online clients");
+			System.out.println("Error when trying to receive message");
 		}
 	}
 	
 	private void handleCaseChatEnd(ProtocolManager protocolManager, ProtocolMsgParsedObj parsedObject){
-		
+		try{
+			ProtocolChatEndMsg protocolChatEndMsgObject = protocolManager.makeProtocolChatEndMsgObj(parsedObject);
+			chatManager.alertEndChat(protocolChatEndMsgObject);
+		}catch(IllegalArgumentException e){
+			System.out.println("Error when trying to end a chat");
+		}
 	}
 	
 	private void handleCaseChatCreated(ProtocolManager protocolManager, ProtocolMsgParsedObj parsedObject){
-		
+		try{
+			ProtocolChatCreatedMsg protocolChatCreatedMsgObject = protocolManager.makeProtocolChatCreatedMsgObj(parsedObject);
+			chatManager.createClientSideChat(protocolChatCreatedMsgObject);
+			//TODO
+		}catch(IllegalArgumentException e){
+			System.out.println("Error when trying to create a chat");
+		}
 	}
 	
 	private void handleCaseChatAskPermission(ProtocolManager protocolManager, ProtocolMsgParsedObj parsedObject){
-		
+		//TODO
 	}
 	
 	private void handleCaseChatGivesPermission(ProtocolManager protocolManager, ProtocolMsgParsedObj parsedObject){
-		
+		//TODO
 	}
 	
 	private void handleCaseChatDeniesPermission(ProtocolManager protocolManager, ProtocolMsgParsedObj parsedObject){
-		
+		//TODO
 	}
 
 }
