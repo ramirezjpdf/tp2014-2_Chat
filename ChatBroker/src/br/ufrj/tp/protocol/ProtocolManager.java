@@ -46,8 +46,14 @@ public class ProtocolManager {
 		return wrap(ProtocolAction.CHATDENIESPERMISSION, asked.getUsername(), asker.getUsername());
 	}
 	
-	public byte[] wrapChatCreatedMsg(Client asker, Client asked){
-		return wrap(ProtocolAction.CHATCREATED, asker.getUsername(), asked.getUsername());
+	public byte[] wrapChatCreatedMsg(Collection<? extends Client> clients){
+		String [] clientUsernames = new String[clients.size()];
+		int i = 0;
+		for (Client client : clients){
+			clientUsernames[i] = client.getUsername();
+			i++;
+		}
+		return wrap(ProtocolAction.CHATCREATED, clientUsernames);
 	}
 	
 	public byte[] wrapChatEndMsg(Client sender, String chatId){
@@ -87,7 +93,7 @@ public class ProtocolManager {
 	
 	public Set<Client> makeClientSetFromListMsg(ProtocolMsgParsedObj po) throws IllegalArgumentException{
 		if(!po.getAction().equals(ProtocolAction.LIST)){
-			throw new IllegalArgumentException("This parsed object does not correspond to a LIST Msg");
+			throw new IllegalArgumentException("This parsed object does not correspond to a " + ProtocolAction.LIST + " Msg");
 		}
 		
 		Set<Client> clientSet = new HashSet<Client>();
@@ -100,9 +106,17 @@ public class ProtocolManager {
 	
 	public ProtocolChatMsg makeProtocolChatMsgObj(ProtocolMsgParsedObj po){
 		if(!po.getAction().equals(ProtocolAction.CHAT)){
-			throw new IllegalArgumentException("This parsed object does not correspond to a CHAT Msg");
+			throw new IllegalArgumentException("This parsed object does not correspond to a " + ProtocolAction.CHAT + " Msg");
 		}
 		
 		return new ProtocolChatMsg(new Client(po.getArgs().get(0)), po.getArgs().get(1), po.getArgs().get(2));
+	}
+	
+	public ProtocolChatEndMsg makeProtocolChatEndMsgObj(ProtocolMsgParsedObj po){
+		if(!po.getAction().equals(ProtocolAction.CHATEND)){
+			throw new IllegalArgumentException("This parsed object does not correspond to a " + ProtocolAction.CHATEND + " Msg");
+		}
+		
+		return new ProtocolChatEndMsg(new Client(po.getArgs().get(0)), po.getArgs().get(1));
 	}
 }

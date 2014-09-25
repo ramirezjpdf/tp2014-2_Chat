@@ -18,7 +18,7 @@ Cliente B recusa pedido de Cliente A para começar conversa.
 	[CHATDENIESPERMISSION]ClientAsked;ClientAsker.
 	
 Cliente A avisa para Cliente B da criação do Chat para os dois.
-	[CHATCREATED]ClientAsker;ClientAsked.
+	[CHATCREATED]Client1;Client2;...;ClientN.
 	
 Cliente A sai do chat
 	[CHATEND]Sender;ChatID.

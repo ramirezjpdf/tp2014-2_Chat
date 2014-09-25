@@ -1,5 +1,6 @@
 package br.ufrj.tp.test;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -58,7 +59,7 @@ public class ProtocolManagerTest {
 		
 		byte[] chatCreatedMsg;
 		System.out.println("### Wrap Chat Created Msg ###");
-		System.out.println(new String(chatCreatedMsg = pm.wrapChatCreatedMsg(asker, asked)));
+		System.out.println(new String(chatCreatedMsg = pm.wrapChatCreatedMsg(Arrays.asList(asker, asked))));
 		System.out.println("#############################");
 		
 		System.out.println("");
