@@ -2,6 +2,13 @@ NOVO Protocolo de Cliente-Servidor
 
 Com base no modelo proposto de comunicação entre servidor-broker-cliente...
 
+
+Servidor informa que foi estabelecida conexao com o cliente.
+	[CONNECTION]OK.
+
+Cliente solicita efetuar login no Chat.
+	[CHATLOGIN]Client.
+
 Mensagem de Chat de Sender para Algum Chat.
 	[CHAT]Sender;ChatId;Mensagem.
 	
