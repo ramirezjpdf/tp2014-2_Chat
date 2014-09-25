@@ -4,7 +4,9 @@ import java.io.IOException;
 
 import br.ufrj.tp.client.Client;
 import br.ufrj.tp.model.chat.ChatManager;
+import br.ufrj.tp.protocol.ProtocolAskChatPermission;
 import br.ufrj.tp.protocol.ProtocolChatMsg;
+import br.ufrj.tp.protocol.ProtocolDeniesChatPermission;
 import br.ufrj.tp.protocol.ProtocolManager;
 import br.ufrj.tp.protocol.ProtocolMsgParsedObj;
 import br.ufrj.tp.sockConnection.SockConnection;
@@ -99,7 +101,8 @@ public class RemoteManager implements Runnable{
 	}
 	
 	private void handleCaseChatAskPermission(ProtocolManager protocolManager, ProtocolMsgParsedObj parsedObject){
-		
+		ProtocolAskChatPermission protocolAskChatPermissionObject = protocolManager.makeProtocolAskChatPermission(parsedObject);
+		//TODO Tomar acoes para solicitar permissao dos clientes solicitados para o chat.
 	}
 	
 	private void handleCaseChatGivesPermission(ProtocolManager protocolManager, ProtocolMsgParsedObj parsedObject){
@@ -107,7 +110,8 @@ public class RemoteManager implements Runnable{
 	}
 	
 	private void handleCaseChatDeniesPermission(ProtocolManager protocolManager, ProtocolMsgParsedObj parsedObject){
-		
+		ProtocolDeniesChatPermission protocolDeniesChatPermissionObject = protocolManager.makeProtocolDeniesChatPermission(parsedObject);
+		//TODO Tomar acoes para avisar cliente solicitante sobre recusa de iniciar chat do cliente solicitado.
 	}
 
 }
